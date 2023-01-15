@@ -1,0 +1,20 @@
+[
+  {
+    "id": "F8762",
+    "price": 33.99,
+    "createdAt": "Sun Jan 15 2023 08:00:03",
+    "status": "ACCEPTED"
+  },
+  {
+    "id": "A9245",
+    "price": 94.35,
+    "createdAt": "Mon Jan 16 2023 08:00:03",
+    "status": "PENDING"
+  },
+  {
+    "id": "Y7902",
+    "price": 6.99,
+    "createdAt": "Tues Jan 17 2023 08:00:03",
+    "status": "DECLINED"
+  }
+]

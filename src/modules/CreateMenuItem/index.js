@@ -68,6 +68,14 @@ const CreateMenuItem = () => {
           value: 'lunch',
           label: 'Lunch',
         },
+        {
+            value: 'snacks',
+            label: 'Snacks',
+        },
+        {
+            value: 'beverages',
+            label: 'Beverages',
+        },
       ]}
     />
                     </Form.Item>  

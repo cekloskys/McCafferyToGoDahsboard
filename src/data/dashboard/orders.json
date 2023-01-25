@@ -3,18 +3,28 @@
     "id": "F8762",
     "price": 33.99,
     "createdAt": "Sun Jan 15 2023 08:00:03",
-    "status": "ACCEPTED"
+    "pickup" : "Sun Jan 15 2023 08:45:15",
+    "status": "IN PROGRESS"
   },
   {
     "id": "A9245",
     "price": 94.35,
     "createdAt": "Mon Jan 16 2023 08:00:03",
+    "pickup" : "Mon Jan 16 2023 08:30:20",
     "status": "PENDING"
   },
   {
     "id": "Y7902",
     "price": 6.99,
     "createdAt": "Tues Jan 17 2023 08:00:03",
+    "pickup" : "Tues Jan 17 2023 08:20:20",
     "status": "DECLINED"
+  },
+  {
+    "id": "M0070",
+    "price": 52.45,
+    "createdAt": "Mon Jan 16 2023 08:00:03",
+    "pickup" : "Mon Jan 16 2023 08:30:20",
+    "status": "COMPLETED"
   }
 ]

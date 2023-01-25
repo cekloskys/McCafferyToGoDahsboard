@@ -3,18 +3,21 @@
     "id": "1",
     "name": "Big Mac",
     "price": 9.99,
+    "calories": 536,
     "quantity": 2
   },
   {
     "id": "2",
     "name": "Chicken Nuggets",
     "price": 6.99,
+    "calories": 59,
     "quantity": 1
   },
   {
     "id": "3",
     "name": "Big Tasty",
     "price": 15.99,
+    "calories": 525,
     "quantity": 3
   }
 ]

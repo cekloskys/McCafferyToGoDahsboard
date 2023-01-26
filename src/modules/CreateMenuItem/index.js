@@ -9,7 +9,7 @@ const CreateMenuItem = () => {
 
     const onChange = (gluten) => {console.log(`checked = ${gluten.target.checked}`);
     };
-    const onFinish = ({name, description, price, calories}) => {
+    const onFinish = ({name, description, price, calories, foodcategory}) => {
         if (!name) {
             message.error('Name required!');
             return;
@@ -24,6 +24,10 @@ const CreateMenuItem = () => {
         }
         if (!calories) {
             message.error('Calories required!');
+            return;
+        }
+        if (!foodcategory) {
+            message.error('Food Category required!');
             return;
         }
         message.success('Dish created!');
@@ -56,10 +60,6 @@ const CreateMenuItem = () => {
                 <Select defaultValue="Choose Food Category" style={{ width: 240, }} 
                 onChange={handleChange}
       options={[
-        {
-          value: 'food',
-          label: 'Choose Food Category',
-        },
         {
           value: 'breakfast',
           label: 'Breakfast',

@@ -48,11 +48,11 @@ const CreateRestaurant = () => {
                 </Form.Item> 
                 <div style={{display: 'flex'}}>
                 <Form.Item label={'Start Hours'} required name='starthours'>
-                <TimePicker onChange={onStartChange} defaultValue={dayjs('12:08', format)} format={format}
+                <TimePicker onChange={onStartChange} defaultValue={dayjs('12:00', format)} format={format}
                 use12Hours={true} />
                 </Form.Item>
                 <Form.Item style={{marginLeft:20}} label={'End Hours'} required name='endhours'>
-                <TimePicker onChange={onEndChange} defaultValue={dayjs('12:08', format)} format={format}
+                <TimePicker onChange={onEndChange} defaultValue={dayjs('12:00', format)} format={format}
                 use12Hours={true} />
                 </Form.Item>
                 </div>

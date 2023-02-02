@@ -1,5 +1,6 @@
 import { Layout, Image } from 'antd';
 import AppRoutes from './components/Routes';
+import RestaurantContextProvider from "./contexts/RestaurantContext";
 import SideMenu from './components/SideMenu';
 import { Amplify } from 'aws-amplify';
 import awsconfig from './aws-exports';
@@ -11,6 +12,7 @@ const { Sider, Content, Footer } = Layout;
 
 function App() {
   return (
+    <RestaurantContextProvider>
     <Layout>
       <Sider style={{backgroundColor: 'white'}}>
         <Image 
@@ -28,6 +30,7 @@ function App() {
         </Footer>
       </Layout>
     </Layout>
+    </RestaurantContextProvider>
   );
 }
 

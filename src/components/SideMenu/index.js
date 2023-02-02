@@ -1,10 +1,13 @@
 import { Menu } from 'antd';
 import { Auth } from 'aws-amplify';
 import { useNavigate } from 'react-router-dom';
+import { useRestaurantContext } from '../../contexts/RestaurantContext';
+
 
 const SideMenu = () => {
 
     const navigate = useNavigate();
+    const {restaurant} = useRestaurantContext();
 
     const menuItems = [
         {
@@ -35,7 +38,10 @@ const SideMenu = () => {
     };
 
     return (
-        <Menu items={menuItems} onClick={onMenuItemClick} />
+        <>
+          {restaurant && (<h4>{restaurant.name}</h4>)}
+          <Menu items={menuItems} onClick={onMenuItemClick} />
+        </>
     );
 };
 

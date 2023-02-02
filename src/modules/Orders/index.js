@@ -1,26 +1,28 @@
+import {useState, useEffect} from "react";
 import { Card, Table, Tag } from 'antd';
-import orders from '../../data/dashboard/orders.json';
 import { useNavigate } from 'react-router-dom';
 
+import { DataStore } from 'aws-amplify';
+import {Order, OrderStatus} from '../../models';
+
 const Orders = () => {
+    const [orders, setOrders] = useState([]);
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        DataStore.query(Order).then(setOrders);
+    }, []);
+
+    console.log(orders);
+
     const renderOrderStatus = (orderStatus) => {
-        let color = '';
-
-        if (orderStatus === 'IN PROGRESS') {
-            color = 'orange';
-        } else if (orderStatus === 'PENDING') {
-            color = 'blue';
-        } else if (orderStatus === 'COMPLETED') {
-            color = 'green';
+        const statusToColor ={
+            [OrderStatus.IN_PROGRESS]: "orange",
+            [OrderStatus.PENDING]: "blue",
+            [OrderStatus.COMPLETED]: "green",
         }
-        else {
-            color = 'red';
-        }
-
-        return <Tag color={color}>{orderStatus}</Tag>
+        return <Tag color={statusToColor[orderStatus]}>{orderStatus}</Tag>
     }
 
     const tableColumns = [
@@ -29,21 +31,23 @@ const Orders = () => {
             dataIndex: 'id',
             key: 'id',
         },
-        {
+         {
             title: 'Created At',
-            dataIndex: 'createdAt',
+           dataIndex: 'createdAt',
             key: 'createdAt',
         },
+        /*
         {
             title: 'Pick Up Time',
             dataIndex: 'pickup',
             key: 'pickup',
         },
+       */
         {
             title: 'Price',
-            dataIndex: 'price',
-            key: 'price',
-            render: (price) => `$${price}`
+            dataIndex: 'total',
+            key: 'total',
+            render: (total) => `$${total.toFixed(2)}`
         },
         {
             title: 'Status',

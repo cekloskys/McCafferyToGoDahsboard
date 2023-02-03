@@ -9,7 +9,17 @@ const SideMenu = () => {
     const navigate = useNavigate();
     const {restaurant} = useRestaurantContext();
 
-    const menuItems = [
+    const onMenuItemClick = async (menuItem) => {
+        if (menuItem.key === 'signout'){
+            await Auth.signOut();
+            window.location.reload();
+        } else {
+            navigate(menuItem.key);
+        }  
+    };
+
+    const mainMenuItems = [
+
         {
             key: '/',
             label: 'Orders',
@@ -22,21 +32,18 @@ const SideMenu = () => {
             key: 'restaurant',
             label: 'Create Restaurant',
         },
+
+    ]
+
+    const menuItems = [
+        ...(restaurant ? mainMenuItems : []),
         {
             key: 'signout',
             label: 'Sign Out',
         },
     ];
 
-    const onMenuItemClick = async (menuItem) => {
-        if (menuItem.key === 'signout'){
-            await Auth.signOut();
-            window.location.reload();
-        } else {
-            navigate(menuItem.key);
-        }  
-    };
-
+    
     return (
         <>
           {restaurant && (<h4>{restaurant.name}</h4>)}

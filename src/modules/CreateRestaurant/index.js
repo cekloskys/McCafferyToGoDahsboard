@@ -1,8 +1,28 @@
 import { Form, Input, Button, Card, message, TimePicker} from 'antd';
+import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
+import { DataStore } from 'aws-amplify';
+import { Restaurant } from '../../models';
+import { useRestaurantContext } from "../../contexts/RestaurantContext";
 const format = 'HH:mm'; 
 
 const CreateRestaurant = () => {
+    
+    const[name, setName] = useState("");
+    const[address, setAddress] = useState("");
+    const[image, setImage] = useState("");
+    const[starthours, setStartHours] = useState("");
+    const[endhours, setEndHours] = useState("");
+    const {setRestaurant, restaurant} = useRestaurantContext();
+    
+    useEffect(() => {
+        setName(restaurant.name);
+        setAddress(restaurant.address);
+        setImage(restaurant.image);
+        setStartHours(restaurant.startHrs);
+        setEndHours(restaurant.endHrs);    
+    },[restaurant])
+
     const onStartChange = (time , timeString ) => { 
         console.log(time, timeString); 
     }
@@ -31,6 +51,14 @@ const CreateRestaurant = () => {
             return;
         }
         
+       const newRestuarant = DataStore.save(new Restaurant({
+            name,
+            address,
+            image,
+            startHrs:starthours,
+            endHrs:endhours,
+        }));
+        setRestaurant(newRestuarant);
         message.success('Restaurant created!' + starthours + ' ' + endhours);
     }
 
@@ -38,10 +66,14 @@ const CreateRestaurant = () => {
         <Card title={'Restaurant Details'} style={{margin: 20}}>
             <Form layout='vertical' onFinish={onFinish}>
                 <Form.Item label={'Name'} required name='name'>
-                    <Input placeholder='Enter Name' />
+                    <Input placeholder='Enter Name' 
+                    value={name} 
+                    onChange={(e) => setName(e)}/>
                 </Form.Item>
                 <Form.Item label={'Address'} required name='address'>
-                    <Input placeholder='Enter Address' />
+                    <Input placeholder='Enter Address' 
+                    value={address}
+                    onChange={(e) => setAddress(e)}/>
                 </Form.Item>
                 <Form.Item label={'Image'} required name='image'>
                     <Input placeholder='Enter Image Link' />

@@ -21,6 +21,7 @@ const Orders = () => {
             [OrderStatus.IN_PROGRESS]: "orange",
             [OrderStatus.PENDING]: "blue",
             [OrderStatus.COMPLETED]: "green",
+            [OrderStatus.DECLINED]: "red",
         }
         return <Tag color={statusToColor[orderStatus]}>{orderStatus}</Tag>
     }

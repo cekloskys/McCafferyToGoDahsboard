@@ -1,8 +1,20 @@
 import { Card, Table, Button } from 'antd';
-import dishes from '../../data/dashboard/dishes.json';
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { DataStore } from 'aws-amplify';
+import { Dish } from '../../models';
+import { useRestaurantContext } from '../../contexts/RestaurantContext';
 
 const RestaurantMenu = () => {
+    const[dishes, setDishes] = useState("");
+    const { restaurant } = useRestaurantContext();
+    
+    useEffect(() => {
+        if (!restaurant.id) {
+            return;
+        }
+        DataStore.query(Dish, d => d.restaurantID.eq(restaurant.id)).then(setDishes);
+    }, [restaurant?.id]);
 
     const tableColumns = [
         {

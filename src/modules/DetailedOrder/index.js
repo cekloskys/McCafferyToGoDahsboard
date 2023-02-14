@@ -1,10 +1,37 @@
-import { Card, Descriptions, Divider, List, Button } from 'antd';
+import { Card, Descriptions, Divider, List, Button, Tag } from 'antd';
 import { useParams } from 'react-router-dom';
 import dishes from '../../data/dashboard/dishes.json';
+import { useState, useEffect } from 'react';
+import { DataStore } from 'aws-amplify';
+import { Order, OrderStatus, User } from '../../models';
+
+
+const statusToColor ={
+    [OrderStatus.IN_PROGRESS]: "orange",
+    [OrderStatus.PENDING]: "blue",
+    [OrderStatus.COMPLETED]: "green",
+    [OrderStatus.DECLINED]: "red",
+}
 
 const DetailedOrder = () => {
 
     const { id } = useParams();
+    const[order, setOrder] = useState({});
+    const[customer, setCustomer] = useState(null);
+    
+    useEffect(() => {
+        if (!id) {
+         return;
+        }
+        DataStore.query(Order, id).then(setOrder);
+    }, [id]);
+
+    useEffect(() => {
+        if (!order.userID) {
+            return;
+           }
+           DataStore.query(User, order.userID).then(setCustomer);
+    },[order?.userID]);
 
     const total = dishes.reduce((sum, dish) => {
         return sum + (dish.quantity * dish.price)
@@ -25,9 +52,9 @@ const DetailedOrder = () => {
     return (
         <Card title={`Order Number ${id}`} style={{ margin: 20 }}>
             <Descriptions bordered column={{ lg: 1, md: 1, sm: 1 }}>
-                <Descriptions.Item label='Order Status'>APPROVED</Descriptions.Item>
+                <Descriptions.Item label='Order Status'><Tag color={statusToColor[order?.status]}>{order?.status}</Tag></Descriptions.Item>
                 <Descriptions.Item label='Pick Up Time'>Tues Jan 17 2023 08:20:20</Descriptions.Item>
-                <Descriptions.Item label='Customer'>Susan Ceklosky</Descriptions.Item>
+                <Descriptions.Item label='Customer'>{customer?.name}</Descriptions.Item>
             </Descriptions>
             <Divider />
             <List 

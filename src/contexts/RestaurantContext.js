@@ -24,7 +24,7 @@ const RestaurantContextProvider = ({ children }) => {
     }, [sub]);
      
 return (
-<RestaurantContext.Provider value ={{ restaurant, setRestaurant }}>
+<RestaurantContext.Provider value ={{ restaurant, sub, setRestaurant }}>
     {children}
     </RestaurantContext.Provider>
     );

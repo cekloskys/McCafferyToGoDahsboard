@@ -9,33 +9,47 @@ const format = 'HH:mm';
 const CreateRestaurant = () => {
     
     const[name, setName] = useState("");
-    const[address, setAddress] = useState("");
+    const[location, setLocation] = useState("");
     const[image, setImage] = useState("");
-    const[starthours, setStartHours] = useState("");
-    const[endhours, setEndHours] = useState("");
-    const {setRestaurant, restaurant} = useRestaurantContext();
+    const[starthours, setStartHours] = useState("12:00");
+    const[endhours, setEndHours] = useState("12:00");
     
+    const {sub, setRestaurant, restaurant} = useRestaurantContext();
+    // console.log(restaurant);
     useEffect(() => {
+        if (!restaurant) {
+            return;
+        }
         setName(restaurant.name);
-        setAddress(restaurant.address);
+        setLocation(restaurant.location);
         setImage(restaurant.image);
         setStartHours(restaurant.startHrs);
-        setEndHours(restaurant.endHrs);    
+        setEndHours(restaurant.endHrs);   
     },[restaurant])
+    console.log(starthours);
 
     const onStartChange = (time , timeString ) => { 
-        console.log(time, timeString); 
+        setStartHours(timeString.toString());
     }
     const onEndChange = (time , timeString ) => { 
-        console.log(time, timeString); 
+        setEndHours(timeString.toString());
     }
-    const onFinish = ({name, address, image, starthours, endhours}) => {
+
+    const onFinish = async () => {
+    if (!restaurant) {
+        await createNewRestuarant();
+    } else {
+        await updateRestuarant();
+        }
+    }
+
+    const createNewRestuarant = async () => {
         if (!name) {
             message.error('Name required!');
             return;
         }
-        if (!address) {
-            message.error('Address required!');
+        if (!location) {
+            message.error('Location required!');
             return;
         }
         if (!image) {
@@ -50,46 +64,80 @@ const CreateRestaurant = () => {
             message.error('End Hours required!');
             return;
         }
+
         
-       const newRestuarant = DataStore.save(new Restaurant({
+       const newRestuarant = await DataStore.save(
+        new Restaurant({
             name,
-            address,
+            location,
             image,
             startHrs:starthours,
             endHrs:endhours,
+            adminSub: sub,
         }));
+
         setRestaurant(newRestuarant);
-        message.success('Restaurant created!' + starthours + ' ' + endhours);
-    }
+        message.success('Restaurant has been created!');
+
+    };
+
+
+    const updateRestuarant = async () => {
+        const updatedRestuarant = await DataStore.save(
+            Restaurant.copyOf(restaurant, (updated) => {
+                updated.name =  name;
+                updated.location = location;
+                updated.image = image;
+                updated.startHrs = starthours;
+                updated.endHrs = endhours;
+                
+            })
+        )
+        setRestaurant(updatedRestuarant);
+        message.success("Restaurant updated!");
+    };
 
     return (
         <Card title={'Restaurant Details'} style={{margin: 20}}>
-            <Form layout='vertical' onFinish={onFinish}>
-                <Form.Item label={'Name'} required name='name'>
+            <Form layout='vertical'>
+                <Form.Item label={'Name'} required>
                     <Input placeholder='Enter Name' 
                     value={name} 
-                    onChange={(e) => setName(e)}/>
+                    onChange={(e) => setName(e.target.value)}/>
                 </Form.Item>
-                <Form.Item label={'Address'} required name='address'>
-                    <Input placeholder='Enter Address' 
-                    value={address}
-                    onChange={(e) => setAddress(e)}/>
+                <Form.Item label={'Location'} required>
+                    <Input placeholder='Enter Location' 
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}/>
                 </Form.Item>
-                <Form.Item label={'Image'} required name='image'>
-                    <Input placeholder='Enter Image Link' />
+                <Form.Item label={'Image'} required>
+                    <Input placeholder='Enter Image Link' 
+                    value={image}
+                    onChange={(e) => setImage(e.target.value)}
+                    />
                 </Form.Item> 
                 <div style={{display: 'flex'}}>
-                <Form.Item label={'Start Hours'} required name='starthours'>
-                <TimePicker onChange={onStartChange} defaultValue={dayjs('12:00', format)} format={format}
-                use12Hours={true} />
+                <Form.Item label={'Start Hours'} required>
+                <TimePicker 
+                onChange={onStartChange} 
+                defaultValue={dayjs('12:00', format)}
+                value={dayjs(starthours, format)} 
+                format={format}
+                use12Hours={true}
+                />
                 </Form.Item>
-                <Form.Item style={{marginLeft:20}} label={'End Hours'} required name='endhours'>
-                <TimePicker onChange={onEndChange} defaultValue={dayjs('12:00', format)} format={format}
-                use12Hours={true} />
+                <Form.Item style={{marginLeft:20}} label={'End Hours'} required>
+                <TimePicker 
+                onChange={onEndChange}
+                defaultValue={dayjs('12:00', format)}
+                value={dayjs(endhours, format)}
+                format={format}
+                use12Hours={true} 
+                />
                 </Form.Item>
                 </div>
                 <Form.Item>
-                    <Button type='primary' htmlType='submit'>Submit</Button>
+                    <Button type='primary' htmlType='submit' onClick={onFinish}>Submit</Button>
                 </Form.Item>
             </Form>
         </Card>

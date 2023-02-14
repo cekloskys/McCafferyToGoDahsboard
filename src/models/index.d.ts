@@ -175,7 +175,7 @@ type EagerBasket = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly pickUpTime: string;
+  readonly pickUpTime?: string | null;
   readonly restaurantID: string;
   readonly userID: string;
   readonly BasketDishes?: (BasketDish | null)[] | null;
@@ -189,7 +189,7 @@ type LazyBasket = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly pickUpTime: string;
+  readonly pickUpTime?: string | null;
   readonly restaurantID: string;
   readonly userID: string;
   readonly BasketDishes: AsyncCollection<BasketDish>;

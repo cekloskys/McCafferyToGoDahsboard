@@ -489,7 +489,7 @@ export const schema = {
                     "name": "pickUpTime",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": true,
+                    "isRequired": false,
                     "attributes": []
                 },
                 "restaurantID": {
@@ -807,6 +807,6 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "codegenVersion": "3.3.5",
-    "version": "5d99760d77bf2f7e6457cc83829a5fcf"
+    "codegenVersion": "3.3.2",
+    "version": "e6ea0bc000db04643d193a6119e20469"
 };

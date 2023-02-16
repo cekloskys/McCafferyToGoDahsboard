@@ -1,10 +1,10 @@
-import { Form, Input, Button, Card, message, TimePicker} from 'antd';
+import { Form, Input, Button, Card, message, TimePicker, InputNumber} from 'antd';
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { DataStore } from 'aws-amplify';
 import { Restaurant } from '../../models';
 import { useRestaurantContext } from "../../contexts/RestaurantContext";
-const format = 'HH:mm'; 
+const format = 'hh:mm'; 
 
 const CreateRestaurant = () => {
     
@@ -13,6 +13,7 @@ const CreateRestaurant = () => {
     const[image, setImage] = useState("");
     const[starthours, setStartHours] = useState("12:00");
     const[endhours, setEndHours] = useState("12:00");
+    const[serviceFee, setServiceFee] = useState("");
     
     const {sub, setRestaurant, restaurant} = useRestaurantContext();
     // console.log(restaurant);
@@ -24,7 +25,8 @@ const CreateRestaurant = () => {
         setLocation(restaurant.location);
         setImage(restaurant.image);
         setStartHours(restaurant.startHrs);
-        setEndHours(restaurant.endHrs);   
+        setEndHours(restaurant.endHrs);
+        setServiceFee(restaurant.serviceFee);   
     },[restaurant])
     console.log(starthours);
 
@@ -74,6 +76,7 @@ const CreateRestaurant = () => {
             startHrs:starthours,
             endHrs:endhours,
             adminSub: sub,
+            serviceFee,
         }));
 
         setRestaurant(newRestuarant);
@@ -83,11 +86,13 @@ const CreateRestaurant = () => {
 
 
     const updateRestuarant = async () => {
+        console.log(serviceFee)
         const updatedRestuarant = await DataStore.save(
             Restaurant.copyOf(restaurant, (updated) => {
                 updated.name =  name;
                 updated.location = location;
                 updated.image = image;
+                updated.serviceFee = serviceFee;
                 updated.startHrs = starthours;
                 updated.endHrs = endhours;
                 
@@ -115,6 +120,13 @@ const CreateRestaurant = () => {
                     value={image}
                     onChange={(e) => setImage(e.target.value)}
                     />
+                </Form.Item>
+                <Form.Item label={'Service Fee'}>
+                        <InputNumber 
+                            placeholder='Enter Service Fee'
+                            value={serviceFee}
+                            onChange={(e) => setServiceFee(e)}
+                            />
                 </Form.Item> 
                 <div style={{display: 'flex'}}>
                 <Form.Item label={'Start Hours'} required>

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import dishes from '../../data/dashboard/dishes.json';
 import { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
-import { Order, OrderStatus, User } from '../../models';
+import { Order, OrderStatus, User, OrderDish } from '../../models';
 
 
 const statusToColor ={
@@ -18,6 +18,8 @@ const DetailedOrder = () => {
     const { id } = useParams();
     const[order, setOrder] = useState({});
     const[customer, setCustomer] = useState(null);
+    const[orderdish, setOrderDish] = useState([]);
+
     
     useEffect(() => {
         if (!id) {
@@ -33,20 +35,42 @@ const DetailedOrder = () => {
            DataStore.query(User, order.userID).then(setCustomer);
     },[order?.userID]);
 
+    useEffect(() => {
+        if (!order.id) {
+            return;
+        }
+        DataStore.query(OrderDish,(od) => od.orderID.eq(order.id)).then(setOrderDish);
+        },[order?.id]);
+
     const total = dishes.reduce((sum, dish) => {
         return sum + (dish.quantity * dish.price)
     }, 0);
 
-    const onDecline = () => {
-        console.log('Order declined.')
+    const onDecline = async () => {
+        const updatedOrder = await DataStore.save(
+            Order.copyOf(order, (updated) => {
+                updated.status =  OrderStatus.DECLINED;
+            })
+        )
+        setOrder(updatedOrder);
     };
 
-    const onAcceptOrder = () => {
-        console.log('In Progress.')
+    const onAcceptOrder = async () => {
+        const updatedOrder = await DataStore.save(
+            Order.copyOf(order, (updated) => {
+                updated.status =  OrderStatus.IN_PROGRESS;
+            })
+        )
+        setOrder(updatedOrder);
     };
     
-    const onFoodIsDone = () => {
-        console.log('Completed.')
+    const onFoodIsDone = async () => {
+        const updatedOrder = await DataStore.save(
+            Order.copyOf(order, (updated) => {
+                updated.status =  OrderStatus.COMPLETED;
+            })
+        )
+        setOrder(updatedOrder);
     };
 
     return (

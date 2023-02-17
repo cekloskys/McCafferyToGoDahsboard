@@ -9,7 +9,7 @@ const Orders = () => {
     const [orders, setOrders] = useState([]);
 
     const navigate = useNavigate();
-
+    
     useEffect(() => {
         DataStore.query(Order).then(setOrders);
     }, []);

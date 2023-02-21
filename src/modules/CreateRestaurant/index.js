@@ -4,15 +4,15 @@ import dayjs from 'dayjs';
 import { DataStore } from 'aws-amplify';
 import { Restaurant } from '../../models';
 import { useRestaurantContext } from "../../contexts/RestaurantContext";
-const format = 'hh:mm'; 
+const format = 'hh:mm A'; 
 
 const CreateRestaurant = () => {
     
     const[name, setName] = useState("");
     const[location, setLocation] = useState("");
     const[image, setImage] = useState("");
-    const[starthours, setStartHours] = useState("12:00");
-    const[endhours, setEndHours] = useState("12:00");
+    const[starthours, setStartHours] = useState("12:00 AM");
+    const[endhours, setEndHours] = useState("12:00 AM");
     const[serviceFee, setServiceFee] = useState("");
     
     const {sub, setRestaurant, restaurant} = useRestaurantContext();
@@ -28,7 +28,7 @@ const CreateRestaurant = () => {
         setEndHours(restaurant.endHrs);
         setServiceFee(restaurant.serviceFee);   
     },[restaurant])
-    console.log(starthours);
+    
 
     const onStartChange = (time , timeString ) => { 
         setStartHours(timeString.toString());
@@ -36,7 +36,9 @@ const CreateRestaurant = () => {
     const onEndChange = (time , timeString ) => { 
         setEndHours(timeString.toString());
     }
-
+    console.log(starthours);
+    console.log(endhours);
+    
     const onFinish = async () => {
     if (!restaurant) {
         await createNewRestuarant();
@@ -132,7 +134,7 @@ const CreateRestaurant = () => {
                 <Form.Item label={'Start Hours'} required>
                 <TimePicker 
                 onChange={onStartChange} 
-                defaultValue={dayjs('12:00', format)}
+                defaultValue={dayjs('12:00 AM', format)}
                 value={dayjs(starthours, format)} 
                 format={format}
                 use12Hours={true}
@@ -141,7 +143,7 @@ const CreateRestaurant = () => {
                 <Form.Item style={{marginLeft:20}} label={'End Hours'} required>
                 <TimePicker 
                 onChange={onEndChange}
-                defaultValue={dayjs('12:00', format)}
+                defaultValue={dayjs('12:00 AM', format)}
                 value={dayjs(endhours, format)}
                 format={format}
                 use12Hours={true} 

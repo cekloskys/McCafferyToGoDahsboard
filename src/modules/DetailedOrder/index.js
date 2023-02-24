@@ -94,28 +94,7 @@ const DetailedOrder = () => {
 
     return (
         <Card title={`Order Number ${id}`} style={{ margin: 20 }}>
-            <Descriptions bordered column={{ lg: 1, md: 1, sm: 1 }}>
-                <Descriptions.Item label='Order Status'><Tag color={statusToColor[order?.status]}>{order?.status}</Tag></Descriptions.Item>
-                <Descriptions.Item label='Pick Up Time'>Tues Jan 17 2023 08:20:20</Descriptions.Item>
-                <Descriptions.Item label='Customer'>{customer?.name}</Descriptions.Item>
-            </Descriptions>
-            <Divider />
-            <List 
-                dataSource={finalOrderDishes}
-                renderItem={(dish) => (
-                    <List.Item>
-                        <div style={{fontWeight: 'bold'}}>{dish?.Dish?.name} x{dish?.quantity}</div>
-                        <div>${dish?.Dish?.price.toFixed(2)}</div>
-                    </List.Item>
-                )}
-            />
-            <Divider />
-            <div style={styles.totalContainer}>
-                <h2>Total:</h2>
-                <h2 style={styles.totalPrice}>${order.total && order.total.toFixed(2)}</h2>
-            </div>
-            <Divider />
-            <div style={styles.buttonsContainer}>
+             <div style={styles.buttonsContainer}>
                 <Button
                     block
                     danger
@@ -145,6 +124,28 @@ const DetailedOrder = () => {
                     Food Is Done
                 </Button>
             </div>
+            <Descriptions bordered column={{ lg: 1, md: 1, sm: 1 }}>
+                <Descriptions.Item label='Order Status'><Tag color={statusToColor[order?.status]}>{order?.status}</Tag></Descriptions.Item>
+                <Descriptions.Item label='Pick Up Time'>Tues Jan 17 2023 08:20:20</Descriptions.Item>
+                <Descriptions.Item label='Customer'>{customer?.name}</Descriptions.Item>
+            </Descriptions>
+            <Divider />
+            <List 
+                dataSource={finalOrderDishes}
+                renderItem={(dish) => (
+                    <List.Item>
+                        <div style={{fontWeight: 'bold'}}>{dish?.Dish?.name} x{dish?.quantity}</div>
+                        <div>${dish?.Dish?.price.toFixed(2)}</div>
+                    </List.Item>
+                )}
+            />
+            <Divider />
+            <div style={styles.totalContainer}>
+                <h2>Total:</h2>
+                <h2 style={styles.totalPrice}>${order.total && order.total.toFixed(2)}</h2>
+            </div>
+            <Divider />
+           
         </Card>
     );
 };

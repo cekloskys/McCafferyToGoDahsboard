@@ -10,7 +10,7 @@ const RestaurantMenu = () => {
     const { restaurant } = useRestaurantContext();
     
     useEffect(() => {
-        if (!restaurant.id) {
+        if (!restaurant?.id) {
             return;
         }
         DataStore.query(Dish, d => d.restaurantID.eq(restaurant.id)).then(setDishes);
@@ -40,7 +40,7 @@ const RestaurantMenu = () => {
             render: (price) => `$${price}`
         },
         {
-            title: 'Action',
+            title: '',
             key: 'action',
             render: (_, item) => (
                 <Popconfirm
@@ -51,7 +51,16 @@ const RestaurantMenu = () => {
                     cancelText="No"
                 >
             <Button danger type='primary'>Remove</Button>
-            </Popconfirm>
+            </Popconfirm>            
+            )
+        },
+        {
+            title: '',
+            key: 'action',
+            render: (_, item) => (
+            <Link to={`update/${item.id}`}>
+                <Button type='primary'>Update</Button>
+            </Link>       
             )
         },
     ];

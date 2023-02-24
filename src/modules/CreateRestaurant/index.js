@@ -13,7 +13,7 @@ const CreateRestaurant = () => {
     const[image, setImage] = useState("");
     const[starthours, setStartHours] = useState("12:00 AM");
     const[endhours, setEndHours] = useState("12:00 AM");
-    const[serviceFee, setServiceFee] = useState("");
+    const[serviceFee, setServiceFee] = useState(0);
     
     const {sub, setRestaurant, restaurant} = useRestaurantContext();
     // console.log(restaurant);
@@ -68,6 +68,7 @@ const CreateRestaurant = () => {
             message.error('End Hours required!');
             return;
         }
+
 
         
        const newRestuarant = await DataStore.save(

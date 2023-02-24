@@ -4,6 +4,7 @@ import CreateRestaurant from '../../modules/CreateRestaurant';
 import DetailedOrder from '../../modules/DetailedOrder';
 import Orders from '../../modules/Orders';
 import RestaurantMenu from '../../modules/RestaurantMenu';
+import UpdateMenuItem from '../../modules/UpdateMenuItem';
 
 const AppRoutes = () => {
 
@@ -14,6 +15,7 @@ const AppRoutes = () => {
             <Route path='menu' element={<RestaurantMenu />} />
             <Route path='menu/create' element={<CreateMenuItem />} />
             <Route path='restaurant' element={<CreateRestaurant />} />
+            <Route path='menu/update/:id' element={<UpdateMenuItem />} />
         </Routes>
     );
 };

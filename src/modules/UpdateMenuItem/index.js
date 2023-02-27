@@ -28,10 +28,15 @@ const UpdateMenuItem = () => {
             return;
         }
         DataStore.query(Dish,id).then(setDish);
-        console.log(dish);
-        console.log(dish.price);
-        setPrice(dish.price);
+        
     },[id])
+    useEffect(() => {
+        if(!dish) {
+            return;
+        }
+        setPrice(dish.price);
+        setName(dish.name);
+    },[dish]);
     
     const handleChange = (value) => {
         console.log(`${value}`);
@@ -41,7 +46,15 @@ const UpdateMenuItem = () => {
         setGluten(!gluten);
     };
 
-    const onFinish = async ({ name, description, price, calories, category }) => {
+    const onFinish = async () => {
+        if (!dish) {
+            await updateMenuDetails();
+        } else {
+            await updatedMenuItem();
+            }
+        }
+
+    const updateMenuDetails = async () => {
         if (!name) {
             message.error('Name required!');
             return;
@@ -62,19 +75,31 @@ const UpdateMenuItem = () => {
             message.error('Category required!');
             return;
         }
+        };
 
-            
-       
-        message.success('Dish has been updated!');
+        const updatedMenuItem = async () => {
+        const updatedDish = await DataStore.save(
+            Dish.copyOf(dish, (updated) => {
+                updated.name =  name;
+                updated.description = description;
+                updated.price = price;
+                updated.calories = calories;
+                updated.category = category;
+                updated.image = image;
+                
+            })
+        )
+        setDish(updatedDish);
+        message.success("Dish has been updated!");
         navigate('/menu');
     };
 
     return (
         <Card title={'Update New Item'} style={{ margin: 20 }}>
-            <Form layout='vertical' onFinish={onFinish}>
+            <Form layout='vertical'>
                 <Form.Item label={'Name'} required>
                     <Input 
-                        value={dish.name} 
+                        value={name} 
                         onChange={(e) => setName(e.target.value)}
                     />
                 </Form.Item>
@@ -103,8 +128,9 @@ const UpdateMenuItem = () => {
                             onChange={onChange}>Gluten Free</Checkbox>
                     </Form.Item>
                 </div>
-                <Form.Item label={'Food Category'} required name='category'>
+                <Form.Item label={'Food Category'} required>
                     <Select defaultValue="Choose Food Category" style={{ width: 240, }}
+                        value={dish.category}
                         onChange={handleChange}
                         options={[
                             {
@@ -132,7 +158,9 @@ const UpdateMenuItem = () => {
                     onChange={(e) => setImage(e.target.value)}/>
                 </Form.Item>
                 <Form.Item>
-                    <Button type='primary' htmlType='submit'>Submit</Button>
+                    <Button type='primary' htmlType='submit'
+                    onClick={updateMenuDetails}
+                    >Submit</Button>
                 </Form.Item>
             </Form>
         </Card>

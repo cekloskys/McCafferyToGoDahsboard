@@ -10,7 +10,7 @@ const Orders = () => {
     const {restaurant} = useRestaurantContext();
 
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         if (!restaurant){
             return;
@@ -41,6 +41,20 @@ const Orders = () => {
             title: 'Created At',
            dataIndex: 'createdAt',
             key: 'createdAt',
+            sorter :
+            {
+                compare: (a,b) => {
+                    if(a.createdAt > b.createdAt) 
+                    {
+                        return -1;
+                    }
+                    if(a.createdAt < b.createdAt) {
+                        return 1;
+                    }
+                    return 0;
+                },
+                multiple: 1,
+            },
         },
         /*
         {

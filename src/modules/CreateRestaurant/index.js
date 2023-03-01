@@ -7,7 +7,7 @@ import { useRestaurantContext } from "../../contexts/RestaurantContext";
 const format = 'hh:mm A'; 
 
 const CreateRestaurant = () => {
-    
+
     const[name, setName] = useState("");
     const[location, setLocation] = useState("");
     const[image, setImage] = useState("");

@@ -37,7 +37,7 @@ const RestaurantMenu = () => {
             title: 'Price',
             dataIndex: 'price',
             key: 'price',
-            render: (price) => `$${price}`
+            render: (price) => `$${price.toFixed(2)}`
         },
         {
             title: '',

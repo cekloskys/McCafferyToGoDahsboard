@@ -19,7 +19,7 @@ const UpdateMenuItem = () => {
     const[description, setDescription] = useState('');
     const[price, setPrice] = useState(0);
     const[calories, setCalories] = useState(0);
-    const[gluten, setGluten] = useState();
+    const[glutenFree, setGluten] = useState();
     const[category, setCategory] = useState();
     const[image, setImage] = useState();
 
@@ -34,25 +34,18 @@ const UpdateMenuItem = () => {
         if(!dish) {
             return;
         }
-        setPrice(dish.price);
         setName(dish.name);
+        setDescription(dish.description);
+        setPrice(dish.price);
+        setCalories(dish.calories);
+        setGluten(dish.glutenFree);
+        setCategory(dish.category);
+        setImage(dish.image);
     },[dish]);
     
-    const handleChange = (value) => {
-        console.log(`${value}`);
-    };
-
     const onChange = () => {
-        setGluten(!gluten);
+        setGluten(!glutenFree);
     };
-
-    const onFinish = async () => {
-        if (!dish) {
-            await updateMenuDetails();
-        } else {
-            await updatedMenuItem();
-            }
-        }
 
     const updateMenuDetails = async () => {
         if (!name) {
@@ -75,15 +68,14 @@ const UpdateMenuItem = () => {
             message.error('Category required!');
             return;
         }
-        };
-
-        const updatedMenuItem = async () => {
+        
         const updatedDish = await DataStore.save(
             Dish.copyOf(dish, (updated) => {
                 updated.name =  name;
                 updated.description = description;
                 updated.price = price;
                 updated.calories = calories;
+                updated.glutenFree = glutenFree;
                 updated.category = category;
                 updated.image = image;
                 
@@ -106,32 +98,32 @@ const UpdateMenuItem = () => {
                 <Form.Item label={'Description'} required>
                     <TextArea
                         rows={4}
-                        value={dish.description} 
+                        value={description} 
                         onChange={(e) => setDescription(e.target.value)}
                     />
                 </Form.Item>
                 <div style={{ display: 'flex' }}>
                     <Form.Item label={'Price'} required>
                         <InputNumber
-                        value={dish.price} 
-                        onChange={(e) => setPrice(e.target.value)}/>
+                        value={price} 
+                        onChange={(e) => setPrice(e)}/>
                     </Form.Item>
                     <Form.Item style={{ marginLeft: 50 }} label={'Calories'} required>
                         <InputNumber 
-                        value={dish.calories} 
-                        onChange={(e) => setCalories(e.target.value)}
+                        value={calories} 
+                        onChange={(e) => setCalories(e)}
                         />
                     </Form.Item>
                     <Form.Item style={{ marginLeft: 50 }} label={'Gluten'}>
                         <Checkbox
-                            checked={dish.glutenFree}
+                            checked={glutenFree}
                             onChange={onChange}>Gluten Free</Checkbox>
                     </Form.Item>
                 </div>
                 <Form.Item label={'Food Category'} required>
                     <Select defaultValue="Choose Food Category" style={{ width: 240, }}
-                        value={dish.category}
-                        onChange={handleChange}
+                        value={category}
+                        onChange={(e) => setCategory(e)}
                         options={[
                             {
                                 value: 'Breakfast',
@@ -154,7 +146,7 @@ const UpdateMenuItem = () => {
                 </Form.Item>
                 <Form.Item label={'Image'}>
                     <Input
-                    value={dish.image} 
+                    value={image} 
                     onChange={(e) => setImage(e.target.value)}/>
                 </Form.Item>
                 <Form.Item>

@@ -10,11 +10,11 @@ const AppRoutes = () => {
 
     return (
         <Routes>
-            <Route path='/' element={<Orders />} />
+            <Route path='order' element={<Orders />} />
             <Route path='order/:id' element={<DetailedOrder />} />
             <Route path='menu' element={<RestaurantMenu />} />
             <Route path='menu/create' element={<CreateMenuItem />} />
-            <Route path='restaurant' element={<CreateRestaurant />} />
+            <Route path='/' element={<CreateRestaurant />} />
             <Route path='menu/update/:id' element={<UpdateMenuItem />} />
         </Routes>
     );

@@ -20,10 +20,9 @@ const RestaurantContextProvider = ({ children }) => {
         // fetch Restaurant and filter by adminSub
         DataStore.query(Restaurant, (r) => r.adminSub.eq(sub)).then(
             (restaurants) => setRestaurant(restaurants[0]));
-
-            console.log(sub);
-            console.log(restaurant);
+            
     }, [sub]);
+
     
 return (
 <RestaurantContext.Provider value ={{ restaurant, sub, setRestaurant }}>

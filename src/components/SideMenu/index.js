@@ -12,6 +12,7 @@ const SideMenu = () => {
     const onMenuItemClick = async (menuItem) => {
         if (menuItem.key === 'signout'){
             await Auth.signOut();
+            navigate("/");
             window.location.reload();
         } else {
             navigate(menuItem.key);
@@ -20,7 +21,7 @@ const SideMenu = () => {
 
     const mainMenuItems = [
         {
-            key: '/',
+            key: 'order',
             label: 'Orders',
         },
         {
@@ -32,7 +33,7 @@ const SideMenu = () => {
     const menuItems = [
         ...(restaurant ? mainMenuItems : []),
         {
-            key: 'restaurant',
+            key: '/',
             label: 'Create Restaurant',
         },
         {

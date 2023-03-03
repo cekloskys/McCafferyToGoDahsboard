@@ -118,7 +118,7 @@ const CreateRestaurant = () => {
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}/>
                 </Form.Item>
-                <Form.Item label={'Image'} required>
+                <Form.Item label={'Image (required orientation: landscape)'} required>
                     <Input placeholder='Enter Image Link' 
                     value={image}
                     onChange={(e) => setImage(e.target.value)}

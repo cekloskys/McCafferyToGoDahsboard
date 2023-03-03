@@ -11,6 +11,19 @@ const Orders = () => {
 
     const navigate = useNavigate();
 
+    const getFullDate = (date) => {
+        const dateAndTime = date.split('T');
+      console.log(dateAndTime);
+       // return dateAndTime[0].split('-').reverse().join('-');
+       var time = dateAndTime[1].split(':');
+       var hours = time[0];
+       var minutes = time[1];
+       var timeValue = "" + ((hours >12) ? hours -12 :hours);
+       timeValue += (minutes < 10) ? ":0" : ":" + minutes;
+       timeValue += (hours >= 12) ? " PM" : " AM";
+        return dateAndTime[0]  + " " + timeValue;
+      };
+
     useEffect(() => {
         if (!restaurant){
             return;
@@ -41,6 +54,7 @@ const Orders = () => {
             title: 'Created At',
            dataIndex: 'createdAt',
             key: 'createdAt',
+            render: ((date) => getFullDate(date)),
             sorter :
             {
                 compare: (a,b) => {
@@ -56,13 +70,27 @@ const Orders = () => {
                 multiple: 1,
             },
         },
-        /*
+        
         {
             title: 'Pick Up Time',
-            dataIndex: 'pickup',
-            key: 'pickup',
+            dataIndex: 'pickUpTime',
+            key: 'pickUpTime',
+            sorter :
+            {
+                compare: (a,b) => {
+                    if(a.pickUpTime> b.pickUpTime) 
+                    {
+                        return -1;
+                    }
+                    if(a.pickUpTime < b.pickUpTime) {
+                        return 1;
+                    }
+                    return 0;
+                },
+                multiple: 1,
+            },
         },
-       */
+       
         {
             title: 'Price',
             dataIndex: 'total',

@@ -12,6 +12,8 @@ const statusToColor ={
     [OrderStatus.DECLINED]: "red",
 }
 
+
+
 const DetailedOrder = () => {
 
     const { id } = useParams();
@@ -126,7 +128,7 @@ const DetailedOrder = () => {
             </div>
             <Descriptions bordered column={{ lg: 1, md: 1, sm: 1 }}>
                 <Descriptions.Item label='Order Status'><Tag color={statusToColor[order?.status]}>{order?.status}</Tag></Descriptions.Item>
-                <Descriptions.Item label='Pick Up Time'>Tues Jan 17 2023 08:20:20</Descriptions.Item>
+                <Descriptions.Item label='Pick Up Time'>{order?.pickUpTime}</Descriptions.Item>
                 <Descriptions.Item label='Customer'>{customer?.name}</Descriptions.Item>
             </Descriptions>
             <Divider />

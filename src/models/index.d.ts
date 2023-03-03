@@ -98,6 +98,7 @@ type EagerOrder = {
   readonly userID: string;
   readonly Restaurant?: Restaurant | null;
   readonly OrderDishes?: (OrderDish | null)[] | null;
+  readonly pickUpTime?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly orderRestaurantId?: string | null;
@@ -114,6 +115,7 @@ type LazyOrder = {
   readonly userID: string;
   readonly Restaurant: AsyncItem<Restaurant | undefined>;
   readonly OrderDishes: AsyncCollection<OrderDish>;
+  readonly pickUpTime?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly orderRestaurantId?: string | null;

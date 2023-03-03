@@ -11,7 +11,7 @@ const AppRoutes = () => {
     return (
         <Routes>
             <Route path='order' element={<Orders />} />
-            <Route path='order/:id' element={<DetailedOrder />} />
+            <Route path='order/order/:id' element={<DetailedOrder />} />
             <Route path='menu' element={<RestaurantMenu />} />
             <Route path='menu/create' element={<CreateMenuItem />} />
             <Route path='/' element={<CreateRestaurant />} />

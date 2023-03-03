@@ -284,6 +284,13 @@ export const schema = {
                         ]
                     }
                 },
+                "pickUpTime": {
+                    "name": "pickUpTime",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -807,6 +814,6 @@ export const schema = {
         }
     },
     "nonModels": {},
-    "codegenVersion": "3.3.2",
-    "version": "e6ea0bc000db04643d193a6119e20469"
+    "codegenVersion": "3.3.5",
+    "version": "438242d2ed4ac9eec489e36c69d9b23c"
 };

@@ -87,7 +87,7 @@ const UpdateMenuItem = () => {
     };
 
     return (
-        <Card title={'Update New Item'} style={{ margin: 20 }}>
+        <Card title={'Update Item'} style={{ margin: 20 }}>
             <Form layout='vertical'>
                 <Form.Item label={'Name'} required>
                     <Input 

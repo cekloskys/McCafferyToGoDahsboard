@@ -6,10 +6,10 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
-import { getOverrideProps } from "@aws-amplify/ui-react/internal";
-import { Restaurant } from "../models";
 import { fetchByPath, validateField } from "./utils";
+import { Restaurant } from "../models";
+import { getOverrideProps } from "@aws-amplify/ui-react/internal";
+import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { DataStore } from "aws-amplify";
 export default function RestaurantCreateForm(props) {
   const {
@@ -17,19 +17,20 @@ export default function RestaurantCreateForm(props) {
     onSuccess,
     onError,
     onSubmit,
+    onCancel,
     onValidate,
     onChange,
     overrides,
     ...rest
   } = props;
   const initialValues = {
-    name: "",
-    image: "",
-    startHrs: "",
-    endHrs: "",
-    location: "",
-    adminSub: "",
-    serviceFee: "",
+    name: undefined,
+    image: undefined,
+    startHrs: undefined,
+    endHrs: undefined,
+    location: undefined,
+    adminSub: undefined,
+    serviceFee: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [image, setImage] = React.useState(initialValues.image);
@@ -58,14 +59,7 @@ export default function RestaurantCreateForm(props) {
     adminSub: [],
     serviceFee: [],
   };
-  const runValidationTasks = async (
-    fieldName,
-    currentValue,
-    getDisplayValue
-  ) => {
-    const value = getDisplayValue
-      ? getDisplayValue(currentValue)
-      : currentValue;
+  const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -114,11 +108,6 @@ export default function RestaurantCreateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
-          Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === "string" && value.trim() === "") {
-              modelFields[key] = undefined;
-            }
-          });
           await DataStore.save(new Restaurant(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
@@ -132,14 +121,13 @@ export default function RestaurantCreateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "RestaurantCreateForm")}
       {...rest}
+      {...getOverrideProps(overrides, "RestaurantCreateForm")}
     >
       <TextField
         label="Name"
         isRequired={true}
         isReadOnly={false}
-        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -169,7 +157,6 @@ export default function RestaurantCreateForm(props) {
         label="Image"
         isRequired={true}
         isReadOnly={false}
-        value={image}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -199,7 +186,6 @@ export default function RestaurantCreateForm(props) {
         label="Start hrs"
         isRequired={true}
         isReadOnly={false}
-        value={startHrs}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -229,7 +215,6 @@ export default function RestaurantCreateForm(props) {
         label="End hrs"
         isRequired={true}
         isReadOnly={false}
-        value={endHrs}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -259,7 +244,6 @@ export default function RestaurantCreateForm(props) {
         label="Location"
         isRequired={true}
         isReadOnly={false}
-        value={location}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -289,7 +273,6 @@ export default function RestaurantCreateForm(props) {
         label="Admin sub"
         isRequired={false}
         isReadOnly={false}
-        value={adminSub}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -321,11 +304,15 @@ export default function RestaurantCreateForm(props) {
         isReadOnly={false}
         type="number"
         step="any"
-        value={serviceFee}
         onChange={(e) => {
-          let value = isNaN(parseFloat(e.target.value))
-            ? e.target.value
-            : parseFloat(e.target.value);
+          let value = Number(e.target.value);
+          if (isNaN(value)) {
+            setErrors((errors) => ({
+              ...errors,
+              serviceFee: "Value must be a valid number",
+            }));
+            return;
+          }
           if (onChange) {
             const modelFields = {
               name,
@@ -356,16 +343,21 @@ export default function RestaurantCreateForm(props) {
         <Button
           children="Clear"
           type="reset"
-          onClick={(event) => {
-            event.preventDefault();
-            resetStateValues();
-          }}
+          onClick={resetStateValues}
           {...getOverrideProps(overrides, "ClearButton")}
         ></Button>
         <Flex
           gap="15px"
           {...getOverrideProps(overrides, "RightAlignCTASubFlex")}
         >
+          <Button
+            children="Cancel"
+            type="button"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, "CancelButton")}
+          ></Button>
           <Button
             children="Submit"
             type="submit"

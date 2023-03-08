@@ -2,7 +2,7 @@ type OrderDish @model @auth(rules: [{allow: public}]) {
   id: ID!
   quantity: Int!
   orderID: ID! @index(name: "byOrder")
-  Dish: Dish @hasOne
+  orderDishDishId: String
 }
 
 enum OrderStatus {
@@ -25,8 +25,8 @@ type Order @model @auth(rules: [{allow: public}]) {
 type BasketDish @model @auth(rules: [{allow: public}]) {
   id: ID!
   quantity: Int!
-  Dish: Dish @hasOne
   basketID: ID! @index(name: "byBasket")
+  basketDishDishId: String
 }
 
 type Basket @model @auth(rules: [{allow: public}]) {

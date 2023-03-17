@@ -6,9 +6,9 @@ import { Dish } from '../../models';
 import { useRestaurantContext } from '../../contexts/RestaurantContext';
 
 const RestaurantMenu = () => {
-    const[dishes, setDishes] = useState("");
+    const [dishes, setDishes] = useState("");
     const { restaurant } = useRestaurantContext();
-    
+
     useEffect(() => {
         if (!restaurant?.id) {
             return;
@@ -50,17 +50,17 @@ const RestaurantMenu = () => {
                     okText="Yes"
                     cancelText="No"
                 >
-            <Button danger type='primary'>Remove</Button>
-            </Popconfirm>            
+                    <Button danger type='primary'>Remove</Button>
+                </Popconfirm>
             )
         },
         {
             title: '',
             key: 'action',
             render: (_, item) => (
-            <Link to={`update/${item.id}`}>
-                <Button type='primary'>Update</Button>
-            </Link>       
+                <Link to={`update/${item.id}`}>
+                    <Button type='primary'>Update</Button>
+                </Link>
             )
         },
     ];
@@ -74,8 +74,8 @@ const RestaurantMenu = () => {
     };
 
     return (
-        <Card title={'Menu'} style={{margin: 20}} extra={renderNewItemButton()}>
-            <Table 
+        <Card title={'Menu'} style={{ margin: 20 }} extra={renderNewItemButton()}>
+            <Table
                 dataSource={dishes}
                 columns={tableColumns}
                 rowKey='id'

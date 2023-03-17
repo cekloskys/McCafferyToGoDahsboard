@@ -24,7 +24,7 @@ const CreateMenuItem = () => {
         setGluten(!gluten);
     };
 
-    const onFinish = async ({ name, description, price, calories, category }) => {
+    const onFinish = async ({ name, description, price, calories, category, specialInstructions }) => {
         if (!name) {
             message.error('Name required!');
             return;
@@ -45,7 +45,6 @@ const CreateMenuItem = () => {
             message.error('Category required!');
             return;
         }
-
         const newMenuItem = await DataStore.save(
             new Dish({
                 name,
@@ -56,8 +55,9 @@ const CreateMenuItem = () => {
                 glutenFree: gluten,
                 image,
                 restaurantID: restaurant.id,
+                specialInstructions,
             }));
-        console.log(newMenuItem)
+            console.log(newMenuItem);
         message.success('Dish has been created!');
         navigate('/menu');
     };
@@ -66,7 +66,7 @@ const CreateMenuItem = () => {
         <Card title={'Create New Item'} style={{ margin: 20 }}>
             <Form layout='vertical' onFinish={onFinish}>
                 <Form.Item label={'Name'} required name='name'>
-                    <Input 
+                    <Input
                         placeholder='Enter Name'
                     />
                 </Form.Item>
@@ -74,6 +74,11 @@ const CreateMenuItem = () => {
                     <TextArea
                         rows={4}
                         placeholder='Enter Description'
+                    />
+                </Form.Item>
+                <Form.Item label={'Special Instructions'} name='specialInstructions'>
+                    <Input
+                        placeholder='Enter Special Instructions'
                     />
                 </Form.Item>
                 <div style={{ display: 'flex' }}>

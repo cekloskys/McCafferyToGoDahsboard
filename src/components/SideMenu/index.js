@@ -3,20 +3,19 @@ import { Auth } from 'aws-amplify';
 import { useNavigate } from 'react-router-dom';
 import { useRestaurantContext } from '../../contexts/RestaurantContext';
 
-
 const SideMenu = () => {
 
     const navigate = useNavigate();
-    const {restaurant} = useRestaurantContext();
+    const { restaurant } = useRestaurantContext();
 
     const onMenuItemClick = async (menuItem) => {
-        if (menuItem.key === 'signout'){
+        if (menuItem.key === 'signout') {
             await Auth.signOut();
             navigate("/");
             window.location.reload();
         } else {
             navigate(menuItem.key);
-        }  
+        }
     };
 
     const mainMenuItems = [
@@ -43,11 +42,11 @@ const SideMenu = () => {
 
     ];
 
-    
+
     return (
         <>
-          {restaurant && (<h4>{restaurant.name}</h4>)}
-          <Menu items={menuItems} onClick={onMenuItemClick} />
+            {restaurant && (<h4>{restaurant.name}</h4>)}
+            <Menu items={menuItems} onClick={onMenuItemClick} />
         </>
     );
 };

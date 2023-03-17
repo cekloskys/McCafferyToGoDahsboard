@@ -53,6 +53,13 @@
       "service": "Cognito"
     }
   },
+  "function": {
+    "CreatePayment": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
   "storage": {
     "s3mccafferytogostorage5683849b": {
       "dependsOn": [],

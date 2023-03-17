@@ -5,8 +5,8 @@
  **************************************************************************/
 
 import * as React from "react";
-import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -24,13 +24,13 @@ export declare type UserCreateFormValidationValues = {
     sub?: ValidationFunction<string>;
     schoolId?: ValidationFunction<string>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type UserCreateFormOverridesProps = {
-    UserCreateFormGrid?: FormProps<GridProps>;
-    name?: FormProps<TextFieldProps>;
-    email?: FormProps<TextFieldProps>;
-    sub?: FormProps<TextFieldProps>;
-    schoolId?: FormProps<TextFieldProps>;
+    UserCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    email?: PrimitiveOverrideProps<TextFieldProps>;
+    sub?: PrimitiveOverrideProps<TextFieldProps>;
+    schoolId?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type UserCreateFormProps = React.PropsWithChildren<{
     overrides?: UserCreateFormOverridesProps | undefined | null;
@@ -39,7 +39,6 @@ export declare type UserCreateFormProps = React.PropsWithChildren<{
     onSubmit?: (fields: UserCreateFormInputValues) => UserCreateFormInputValues;
     onSuccess?: (fields: UserCreateFormInputValues) => void;
     onError?: (fields: UserCreateFormInputValues, errorMessage: string) => void;
-    onCancel?: () => void;
     onChange?: (fields: UserCreateFormInputValues) => UserCreateFormInputValues;
     onValidate?: UserCreateFormValidationValues;
 } & React.CSSProperties>;

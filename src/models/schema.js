@@ -777,7 +777,20 @@ export const schema = {
             ]
         }
     },
-    "nonModels": {},
-    "codegenVersion": "3.3.2",
-    "version": "ceefdff01972c7d54a6094dd86b2f3dd"
+    "nonModels": {
+        "PaymentIntent": {
+            "name": "PaymentIntent",
+            "fields": {
+                "clientSecret": {
+                    "name": "clientSecret",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                }
+            }
+        }
+    },
+    "codegenVersion": "3.3.5",
+    "version": "baad91652ea88affe8d0390be13ba629"
 };

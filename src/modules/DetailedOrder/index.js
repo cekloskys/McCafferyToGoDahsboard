@@ -4,28 +4,36 @@ import { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
 import { Order, OrderStatus, User, OrderDish, Dish } from '../../models';
 
-
-const statusToColor ={
+const statusToColor = {
     [OrderStatus.IN_PROGRESS]: "orange",
     [OrderStatus.PENDING]: "blue",
     [OrderStatus.COMPLETED]: "green",
     [OrderStatus.DECLINED]: "red",
 }
 
-
-
 const DetailedOrder = () => {
 
     const { id } = useParams();
-    const[order, setOrder] = useState({});
-    const[customer, setCustomer] = useState(null);
-    const[orderdish, setOrderDish] = useState([]);
-    const[finalOrderDishes, setFinalOrderDishes] = useState([]);
+    const [order, setOrder] = useState({});
+    const [customer, setCustomer] = useState(null);
+    const [orderdish, setOrderDish] = useState([]);
+    const [finalOrderDishes, setFinalOrderDishes] = useState([]);
 
-    
+    useEffect(() => {
+        const sub = DataStore.observeQuery(Order, (o) =>
+            o.id.eq(id)
+        ).subscribe(({ items }) => {
+            setOrder(items[0]);
+        });
+
+        return () => {
+            sub.unsubscribe();
+        };
+    }, [id]);
+
     useEffect(() => {
         if (!id) {
-         return;
+            return;
         }
         DataStore.query(Order, id).then(setOrder);
     }, [id]);
@@ -33,44 +41,39 @@ const DetailedOrder = () => {
     useEffect(() => {
         if (!order.userID) {
             return;
-           }
-           DataStore.query(User, order.userID).then(setCustomer);
-    },[order?.userID]);
+        }
+        DataStore.query(User, order.userID).then(setCustomer);
+    }, [order?.userID]);
 
     useEffect(() => {
         if (!order.id) {
             return;
         }
-        DataStore.query(OrderDish,(od) => od.orderID.eq(order.id)).then(setOrderDish);
-        },[order?.id]);
+        DataStore.query(OrderDish, (od) => od.orderID.eq(order.id)).then(setOrderDish);
+    }, [order?.id]);
 
-        useEffect (() => {
-            if (!orderdish){
-                return;
-            }
-            const fetchDishes = async () => {
-            const dishes =  await DataStore.query(Dish);
+    useEffect(() => {
+        if (!orderdish) {
+            return;
+        }
+        const fetchDishes = async () => {
+            const dishes = await DataStore.query(Dish);
             console.log(dishes)
-            
-                setFinalOrderDishes(
-                    orderdish.map(orderdish => ({
-                        ...orderdish,
-                        Dish: dishes.find(d => d.id === orderdish.orderDishDishId),
-                    }))
-                );
-            };
-                fetchDishes();
-            },[orderdish]);
 
-   /*   const total = dishes.reduce((sum, dish) => {
-        return sum + (dish.quantity * dish.price)
-    }, 0);
-    */
+            setFinalOrderDishes(
+                orderdish.map(orderdish => ({
+                    ...orderdish,
+                    Dish: dishes.find(d => d.id === orderdish.orderDishDishId),
+                }))
+            );
+        };
+        fetchDishes();
+    }, [orderdish]);
 
     const onDecline = async () => {
         const updatedOrder = await DataStore.save(
             Order.copyOf(order, (updated) => {
-                updated.status =  OrderStatus.DECLINED;
+                updated.status = OrderStatus.DECLINED;
             })
         )
         setOrder(updatedOrder);
@@ -79,16 +82,16 @@ const DetailedOrder = () => {
     const onAcceptOrder = async () => {
         const updatedOrder = await DataStore.save(
             Order.copyOf(order, (updated) => {
-                updated.status =  OrderStatus.IN_PROGRESS;
+                updated.status = OrderStatus.IN_PROGRESS;
             })
         )
         setOrder(updatedOrder);
     };
-    
+
     const onFoodIsDone = async () => {
         const updatedOrder = await DataStore.save(
             Order.copyOf(order, (updated) => {
-                updated.status =  OrderStatus.COMPLETED;
+                updated.status = OrderStatus.COMPLETED;
             })
         )
         setOrder(updatedOrder);
@@ -96,7 +99,7 @@ const DetailedOrder = () => {
 
     return (
         <Card title={`Order Number ${id}`} style={{ margin: 20 }}>
-             <div style={styles.buttonsContainer}>
+            <div style={styles.buttonsContainer}>
                 <Button
                     block
                     danger
@@ -132,11 +135,11 @@ const DetailedOrder = () => {
                 <Descriptions.Item label='Customer'>{customer?.name}</Descriptions.Item>
             </Descriptions>
             <Divider />
-            <List 
+            <List
                 dataSource={finalOrderDishes}
                 renderItem={(dish) => (
                     <List.Item>
-                        <div style={{fontWeight: 'bold'}}>{dish?.Dish?.name} x{dish?.quantity}</div>
+                        <div style={{ fontWeight: 'bold' }}>{dish?.Dish?.name} x{dish?.quantity}</div>
                         <div>${dish?.Dish?.price.toFixed(2)}</div>
                     </List.Item>
                 )}
@@ -147,7 +150,7 @@ const DetailedOrder = () => {
                 <h2 style={styles.totalPrice}>${order.total && order.total.toFixed(2)}</h2>
             </div>
             <Divider />
-           
+
         </Card>
     );
 };

@@ -9,7 +9,17 @@ export enum OrderStatus {
   COMPLETED = "COMPLETED"
 }
 
+type EagerPaymentIntent = {
+  readonly clientSecret: string;
+}
 
+type LazyPaymentIntent = {
+  readonly clientSecret: string;
+}
+
+export declare type PaymentIntent = LazyLoading extends LazyLoadingDisabled ? EagerPaymentIntent : LazyPaymentIntent
+
+export declare const PaymentIntent: (new (init: ModelInit<PaymentIntent>) => PaymentIntent)
 
 type EagerOrderDish = {
   readonly [__modelMeta__]: {

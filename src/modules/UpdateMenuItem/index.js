@@ -11,27 +11,26 @@ const UpdateMenuItem = () => {
 
     const navigate = useNavigate();
     const { id } = useParams();
-    console.log(id);
-   
 
-    const[dish, setDish] = useState({});
-    const[name, setName] = useState('');
-    const[description, setDescription] = useState('');
-    const[price, setPrice] = useState(0);
-    const[calories, setCalories] = useState(0);
-    const[glutenFree, setGluten] = useState();
-    const[category, setCategory] = useState();
-    const[image, setImage] = useState();
+    const [dish, setDish] = useState({});
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [price, setPrice] = useState(0);
+    const [calories, setCalories] = useState(0);
+    const [glutenFree, setGluten] = useState();
+    const [category, setCategory] = useState();
+    const [image, setImage] = useState();
+    const [specialInstructions, setSpecialInstructions] = useState();
 
     useEffect(() => {
         if (!id) {
             return;
         }
-        DataStore.query(Dish,id).then(setDish);
-        
-    },[id])
+        DataStore.query(Dish, id).then(setDish);
+
+    }, [id])
     useEffect(() => {
-        if(!dish) {
+        if (!dish) {
             return;
         }
         setName(dish.name);
@@ -41,8 +40,9 @@ const UpdateMenuItem = () => {
         setGluten(dish.glutenFree);
         setCategory(dish.category);
         setImage(dish.image);
-    },[dish]);
-    
+        setSpecialInstructions(dish.specialInstructions);
+    }, [dish]);
+
     const onChange = () => {
         setGluten(!glutenFree);
     };
@@ -68,17 +68,18 @@ const UpdateMenuItem = () => {
             message.error('Category required!');
             return;
         }
-        
+
         const updatedDish = await DataStore.save(
             Dish.copyOf(dish, (updated) => {
-                updated.name =  name;
+                updated.name = name;
                 updated.description = description;
                 updated.price = price;
                 updated.calories = calories;
                 updated.glutenFree = glutenFree;
                 updated.category = category;
                 updated.image = image;
-                
+                updated.specialInstructions = specialInstructions;
+
             })
         )
         setDish(updatedDish);
@@ -90,28 +91,34 @@ const UpdateMenuItem = () => {
         <Card title={'Update Item'} style={{ margin: 20 }}>
             <Form layout='vertical'>
                 <Form.Item label={'Name'} required>
-                    <Input 
-                        value={name} 
+                    <Input
+                        value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
                 </Form.Item>
                 <Form.Item label={'Description'} required>
                     <TextArea
                         rows={4}
-                        value={description} 
+                        value={description}
                         onChange={(e) => setDescription(e.target.value)}
+                    />
+                </Form.Item>
+                <Form.Item label={'Special Instructions'}>
+                    <Input
+                        value={specialInstructions}
+                        onChange={(e) => setSpecialInstructions(e.target.value)}
                     />
                 </Form.Item>
                 <div style={{ display: 'flex' }}>
                     <Form.Item label={'Price'} required>
                         <InputNumber
-                        value={price} 
-                        onChange={(e) => setPrice(e)}/>
+                            value={price}
+                            onChange={(e) => setPrice(e)} />
                     </Form.Item>
                     <Form.Item style={{ marginLeft: 50 }} label={'Calories'} required>
-                        <InputNumber 
-                        value={calories} 
-                        onChange={(e) => setCalories(e)}
+                        <InputNumber
+                            value={calories}
+                            onChange={(e) => setCalories(e)}
                         />
                     </Form.Item>
                     <Form.Item style={{ marginLeft: 50 }} label={'Gluten'}>
@@ -146,12 +153,12 @@ const UpdateMenuItem = () => {
                 </Form.Item>
                 <Form.Item label={'Image'}>
                     <Input
-                    value={image} 
-                    onChange={(e) => setImage(e.target.value)}/>
+                        value={image}
+                        onChange={(e) => setImage(e.target.value)} />
                 </Form.Item>
                 <Form.Item>
                     <Button type='primary' htmlType='submit'
-                    onClick={updateMenuDetails}
+                        onClick={updateMenuDetails}
                     >Submit</Button>
                 </Form.Item>
             </Form>

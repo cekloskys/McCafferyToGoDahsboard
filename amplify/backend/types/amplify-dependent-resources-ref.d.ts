@@ -1,13 +1,13 @@
 export type AmplifyDependentResourcesAttributes = {
   "api": {
-    "McCafferyToGo": {
+    "McCaffery": {
       "GraphQLAPIEndpointOutput": "string",
       "GraphQLAPIIdOutput": "string",
       "GraphQLAPIKeyOutput": "string"
     }
   },
   "auth": {
-    "McCafferyToGo": {
+    "McCaffery": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
       "IdentityPoolId": "string",
@@ -18,17 +18,10 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
-    "CreatePayment": {
+    "CreatePaymentIntent": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
-      "LambdaExecutionRoleArn": "string",
       "Name": "string",
-      "Region": "string"
-    }
-  },
-  "storage": {
-    "s3mccafferytogostorage5683849b": {
-      "BucketName": "string",
       "Region": "string"
     }
   }

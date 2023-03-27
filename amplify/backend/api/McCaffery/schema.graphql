@@ -1,0 +1,85 @@
+type Mutation {
+  createPaymentIntent(amount: Int!): PaymentIntent! @function(name: "CreatePaymentIntent-${env}")
+}
+
+type PaymentIntent {
+  clientSecret: String!
+}
+
+enum OrderStatus {
+  PENDING
+  DECLINED
+  IN_PROGRESS
+  COMPLETED
+}
+
+type Order @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  total: Float!
+  status: OrderStatus
+  pickUpTime: String
+  OrderDishes: [OrderDish] @hasMany(indexName: "byOrder", fields: ["id"])
+  userID: ID! @index(name: "byUser")
+  Restaurant: Restaurant @hasOne
+}
+
+type OrderDish @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  quantity: Int!
+  orderDishDishId: String
+  specialInstructions: String
+  orderID: ID! @index(name: "byOrder")
+}
+
+type Basket @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  pickUpTime: String
+  BasketDishes: [BasketDish] @hasMany(indexName: "byBasket", fields: ["id"])
+  restaurantID: ID! @index(name: "byRestaurant")
+  userID: ID! @index(name: "byUser")
+}
+
+type BasketDish @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  quantity: Int!
+  basketDishDishId: String
+  specialInstructions: String
+  basketID: ID! @index(name: "byBasket")
+}
+
+type User @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  email: String!
+  sub: String!
+  schoolId: String
+  Baskets: [Basket] @hasMany(indexName: "byUser", fields: ["id"])
+  Orders: [Order] @hasMany(indexName: "byUser", fields: ["id"])
+}
+
+type Dish @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  description: String!
+  price: Float!
+  calories: Int!
+  glutenFree: Boolean!
+  category: String!
+  image: String
+  specialInstructions: String
+  restaurantID: ID! @index(name: "byRestaurant")
+}
+
+type Restaurant @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  image: String!
+  startHrs: String!
+  endHrs: String!
+  location: String!
+  adminSub: String
+  serviceFee: Float
+  Dishes: [Dish] @hasMany(indexName: "byRestaurant", fields: ["id"])
+  Baskets: [Basket] @hasMany(indexName: "byRestaurant", fields: ["id"])
+}
+ 

@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Card, Table, Tag } from 'antd';
+import { Card, Table, Tag, Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { DataStore } from 'aws-amplify';
 import { Order, OrderStatus } from '../../models';
 import { useRestaurantContext } from '../../contexts/RestaurantContext';
+
 
 const Orders = () => {
     const [orders, setOrders] = useState([]);
@@ -70,19 +71,6 @@ const Orders = () => {
             title: 'Pick Up Time',
             dataIndex: 'pickUpTime',
             key: 'pickUpTime',
-            sorter:
-            {
-                compare: (a, b) => {
-                    if (a.pickUpTime > b.pickUpTime) {
-                        return -1;
-                    }
-                    if (a.pickUpTime < b.pickUpTime) {
-                        return 1;
-                    }
-                    return 0;
-                },
-                multiple: 1,
-            },
         },
 
         {
@@ -99,8 +87,21 @@ const Orders = () => {
         },
     ];
 
+    const getorders = () => {
+        DataStore.query(Order, (order) =>
+        order.orderRestaurantId.eq(restaurant.id)).then(setOrders);
+    };
+
+    const renderGetOrderButton = () => {
+        return (
+
+                <Button type='primary' onClick={getorders}>Get Orders</Button>
+
+        );
+    };
+
     return (
-        <Card title='Orders' style={{ margin: 20 }}>
+        <Card title='Orders' style={{ margin: 20 }} extra={renderGetOrderButton()}>
             <Table
                 dataSource={orders}
                 columns={tableColumns}

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { DataStore } from 'aws-amplify';
 import { Order, OrderStatus, User, OrderDish, Dish } from '../../models';
+import { useRestaurantContext } from '../../contexts/RestaurantContext';
 
 const statusToColor = {
     [OrderStatus.IN_PROGRESS]: "orange",
@@ -13,6 +14,8 @@ const statusToColor = {
 
 const DetailedOrder = () => {
 
+    const { restaurant } = useRestaurantContext();
+    
     const { id } = useParams();
     const [order, setOrder] = useState({});
     const [customer, setCustomer] = useState(null);
@@ -139,12 +142,19 @@ const DetailedOrder = () => {
                 dataSource={finalOrderDishes}
                 renderItem={(dish) => (
                     <List.Item>
-                        <div style={{ fontWeight: 'bold' }}>{dish?.Dish?.name} x{dish?.quantity}</div>
+                        <div>
+                            <div style={{ fontWeight: 'bold' }}>{dish?.Dish?.name} x{dish?.quantity}</div>
+                            <div style={{ fontStyle: 'italic'}}>{dish?.specialInstructions}</div>
+                        </div>
                         <div>${dish?.Dish?.price.toFixed(2)}</div>
                     </List.Item>
                 )}
             />
             <Divider />
+            <div style={styles.totalContainer}>
+                <h2>Service Fee:</h2>
+                <h2 style={styles.totalPrice}>${restaurant?.serviceFee.toFixed(2)}</h2>
+            </div>
             <div style={styles.totalContainer}>
                 <h2>Total:</h2>
                 <h2 style={styles.totalPrice}>${order.total && order.total.toFixed(2)}</h2>

@@ -1,6 +1,6 @@
 {
   "api": {
-    "McCafferyToGo": {
+    "McCaffery": {
       "dependsOn": [],
       "output": {
         "authConfig": {
@@ -23,7 +23,7 @@
     }
   },
   "auth": {
-    "McCafferyToGo": {
+    "McCaffery": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -54,17 +54,28 @@
     }
   },
   "function": {
-    "CreatePayment": {
+    "CreatePaymentIntent": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
   },
-  "storage": {
-    "s3mccafferytogostorage5683849b": {
-      "dependsOn": [],
-      "providerPlugin": "awscloudformation",
-      "service": "S3"
+  "parameters": {
+    "AMPLIFY_function_CreatePaymentIntent_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "CreatePaymentIntent"
+        }
+      ]
+    },
+    "AMPLIFY_function_CreatePaymentIntent_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "CreatePaymentIntent"
+        }
+      ]
     }
   }
 }

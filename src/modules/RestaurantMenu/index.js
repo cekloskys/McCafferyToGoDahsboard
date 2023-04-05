@@ -68,7 +68,7 @@ const RestaurantMenu = () => {
     const renderNewItemButton = () => {
         return (
             <Link to={'create'}>
-                <Button type='primary'>New Item</Button>
+                <Button type='primary'>Create New Item</Button>
             </Link>
         );
     };

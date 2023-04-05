@@ -14,7 +14,7 @@ const CreateMenuItem = () => {
     const { restaurant } = useRestaurantContext();
 
     const [gluten, setGluten] = useState(false);
-    const image = "";
+    
 
     const handleChange = (value) => {
         console.log(`${value}`);
@@ -24,7 +24,7 @@ const CreateMenuItem = () => {
         setGluten(!gluten);
     };
 
-    const onFinish = async ({ name, description, price, calories, category, specialInstructions }) => {
+    const onFinish = async ({ name, description, price, calories, category, specialInstructions, image }) => {
         if (!name) {
             message.error('Name required!');
             return;

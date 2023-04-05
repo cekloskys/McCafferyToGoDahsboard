@@ -21,6 +21,12 @@ const DetailedOrder = () => {
     const [customer, setCustomer] = useState(null);
     const [orderdish, setOrderDish] = useState([]);
     const [finalOrderDishes, setFinalOrderDishes] = useState([]);
+    const [createdOn, setCreatedOn] = useState('');
+
+    const getFullDate = (date) => {
+        const fulldate = date.split('T');
+        return fulldate[0];
+    };
 
     useEffect(() => {
         const sub = DataStore.observeQuery(Order, (o) =>
@@ -40,6 +46,15 @@ const DetailedOrder = () => {
         }
         DataStore.query(Order, id).then(setOrder);
     }, [id]);
+
+    useEffect(() => {
+        if (!order.createdAt) {
+            return;
+        }
+        const result = getFullDate(order?.createdAt);
+        setCreatedOn(result);
+    }, [order.createdAt]);
+    
 
     useEffect(() => {
         if (!order.userID) {
@@ -73,14 +88,14 @@ const DetailedOrder = () => {
         fetchDishes();
     }, [orderdish]);
 
-    const onDecline = async () => {
+    /* const onDecline = async () => {
         const updatedOrder = await DataStore.save(
             Order.copyOf(order, (updated) => {
                 updated.status = OrderStatus.DECLINED;
             })
         )
         setOrder(updatedOrder);
-    };
+    }; */
 
     const onAcceptOrder = async () => {
         const updatedOrder = await DataStore.save(
@@ -101,18 +116,8 @@ const DetailedOrder = () => {
     };
 
     return (
-        <Card title={`Order Number ${id}`} style={{ margin: 20 }}>
+        <Card title={`Created On ${createdOn}`} style={{ margin: 20 }}>
             <div style={styles.buttonsContainer}>
-                <Button
-                    block
-                    danger
-                    type='primary'
-                    size='large'
-                    style={styles.button}
-                    onClick={onDecline}
-                >
-                    Decline Order
-                </Button>
                 <Button
                     block
                     type='primary'

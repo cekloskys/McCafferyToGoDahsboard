@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Card, Table, Tag, Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { DataStore, Predicates, SortDirection } from 'aws-amplify';
+import { DataStore } from 'aws-amplify';
 import { Order, OrderStatus } from '../../models';
 import { useRestaurantContext } from '../../contexts/RestaurantContext';
 
@@ -21,12 +21,17 @@ const Orders = () => {
         if (!restaurant) {
             return;
         }
-        DataStore.query(Order, 
-            (order) => order.orderRestaurantId.eq(restaurant.id),
-            Predicates.ALL, {
-                sort: (d) => d.createdAt(SortDirection.DESCENDING)
-            }).then(setOrders);
+        DataStore.query(Order,
+            (order) => order.orderRestaurantId.eq(restaurant.id)).then(setOrders);
     }, [restaurant]);
+
+    useEffect(() => {
+        if (!orders) {
+            return;
+        }
+        const sorted = orders.sort((d1, d2) => new Date(d2.createdAt).getTime() - new Date(d1.createdAt).getTime());
+        setOrders(sorted);
+    }, [orders]);
 
     const renderOrderStatus = (orderStatus) => {
         const statusToColor = {
@@ -68,11 +73,10 @@ const Orders = () => {
     ];
 
     const getorders = () => {
-        DataStore.query(Order, 
-            (order) => order.orderRestaurantId.eq(restaurant.id),
-            Predicates.ALL, {
-                sort: (d) => d.createdAt(SortDirection.DESCENDING)
-            }).then(setOrders);
+        DataStore.query(Order,
+            (order) => order.orderRestaurantId.eq(restaurant.id)).then(setOrders);
+        const sorted = orders.sort((d1, d2) => new Date(d2.createdAt).getTime() - new Date(d1.createdAt).getTime());
+        setOrders(sorted);
     };
 
     const renderGetOrderButton = () => {

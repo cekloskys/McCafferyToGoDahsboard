@@ -6,31 +6,32 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
-import { getOverrideProps } from "@aws-amplify/ui-react/internal";
-import { Restaurant } from "../models";
 import { fetchByPath, validateField } from "./utils";
+import { Restaurant } from "../models";
+import { getOverrideProps } from "@aws-amplify/ui-react/internal";
+import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { DataStore } from "aws-amplify";
 export default function RestaurantUpdateForm(props) {
   const {
-    id: idProp,
-    restaurant: restaurantModelProp,
+    id,
+    restaurant,
     onSuccess,
     onError,
     onSubmit,
+    onCancel,
     onValidate,
     onChange,
     overrides,
     ...rest
   } = props;
   const initialValues = {
-    name: "",
-    image: "",
-    startHrs: "",
-    endHrs: "",
-    location: "",
-    adminSub: "",
-    serviceFee: "",
+    name: undefined,
+    image: undefined,
+    startHrs: undefined,
+    endHrs: undefined,
+    location: undefined,
+    adminSub: undefined,
+    serviceFee: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [image, setImage] = React.useState(initialValues.image);
@@ -41,9 +42,7 @@ export default function RestaurantUpdateForm(props) {
   const [serviceFee, setServiceFee] = React.useState(initialValues.serviceFee);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = restaurantRecord
-      ? { ...initialValues, ...restaurantRecord }
-      : initialValues;
+    const cleanValues = { ...initialValues, ...restaurantRecord };
     setName(cleanValues.name);
     setImage(cleanValues.image);
     setStartHrs(cleanValues.startHrs);
@@ -53,17 +52,14 @@ export default function RestaurantUpdateForm(props) {
     setServiceFee(cleanValues.serviceFee);
     setErrors({});
   };
-  const [restaurantRecord, setRestaurantRecord] =
-    React.useState(restaurantModelProp);
+  const [restaurantRecord, setRestaurantRecord] = React.useState(restaurant);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = idProp
-        ? await DataStore.query(Restaurant, idProp)
-        : restaurantModelProp;
+      const record = id ? await DataStore.query(Restaurant, id) : restaurant;
       setRestaurantRecord(record);
     };
     queryData();
-  }, [idProp, restaurantModelProp]);
+  }, [id, restaurant]);
   React.useEffect(resetStateValues, [restaurantRecord]);
   const validations = {
     name: [{ type: "Required" }],
@@ -74,15 +70,7 @@ export default function RestaurantUpdateForm(props) {
     adminSub: [],
     serviceFee: [],
   };
-  const runValidationTasks = async (
-    fieldName,
-    currentValue,
-    getDisplayValue
-  ) => {
-    const value =
-      currentValue && getDisplayValue
-        ? getDisplayValue(currentValue)
-        : currentValue;
+  const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -131,11 +119,6 @@ export default function RestaurantUpdateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
-          Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === "string" && value.trim() === "") {
-              modelFields[key] = undefined;
-            }
-          });
           await DataStore.save(
             Restaurant.copyOf(restaurantRecord, (updated) => {
               Object.assign(updated, modelFields);
@@ -150,14 +133,14 @@ export default function RestaurantUpdateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "RestaurantUpdateForm")}
       {...rest}
+      {...getOverrideProps(overrides, "RestaurantUpdateForm")}
     >
       <TextField
         label="Name"
         isRequired={true}
         isReadOnly={false}
-        value={name}
+        defaultValue={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -187,7 +170,7 @@ export default function RestaurantUpdateForm(props) {
         label="Image"
         isRequired={true}
         isReadOnly={false}
-        value={image}
+        defaultValue={image}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -217,7 +200,7 @@ export default function RestaurantUpdateForm(props) {
         label="Start hrs"
         isRequired={true}
         isReadOnly={false}
-        value={startHrs}
+        defaultValue={startHrs}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -247,7 +230,7 @@ export default function RestaurantUpdateForm(props) {
         label="End hrs"
         isRequired={true}
         isReadOnly={false}
-        value={endHrs}
+        defaultValue={endHrs}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -277,7 +260,7 @@ export default function RestaurantUpdateForm(props) {
         label="Location"
         isRequired={true}
         isReadOnly={false}
-        value={location}
+        defaultValue={location}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -307,7 +290,7 @@ export default function RestaurantUpdateForm(props) {
         label="Admin sub"
         isRequired={false}
         isReadOnly={false}
-        value={adminSub}
+        defaultValue={adminSub}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -339,11 +322,16 @@ export default function RestaurantUpdateForm(props) {
         isReadOnly={false}
         type="number"
         step="any"
-        value={serviceFee}
+        defaultValue={serviceFee}
         onChange={(e) => {
-          let value = isNaN(parseFloat(e.target.value))
-            ? e.target.value
-            : parseFloat(e.target.value);
+          let value = Number(e.target.value);
+          if (isNaN(value)) {
+            setErrors((errors) => ({
+              ...errors,
+              serviceFee: "Value must be a valid number",
+            }));
+            return;
+          }
           if (onChange) {
             const modelFields = {
               name,
@@ -374,11 +362,7 @@ export default function RestaurantUpdateForm(props) {
         <Button
           children="Reset"
           type="reset"
-          onClick={(event) => {
-            event.preventDefault();
-            resetStateValues();
-          }}
-          isDisabled={!(idProp || restaurantModelProp)}
+          onClick={resetStateValues}
           {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
@@ -386,13 +370,18 @@ export default function RestaurantUpdateForm(props) {
           {...getOverrideProps(overrides, "RightAlignCTASubFlex")}
         >
           <Button
+            children="Cancel"
+            type="button"
+            onClick={() => {
+              onCancel && onCancel();
+            }}
+            {...getOverrideProps(overrides, "CancelButton")}
+          ></Button>
+          <Button
             children="Submit"
             type="submit"
             variation="primary"
-            isDisabled={
-              !(idProp || restaurantModelProp) ||
-              Object.values(errors).some((e) => e?.hasError)
-            }
+            isDisabled={Object.values(errors).some((e) => e?.hasError)}
             {...getOverrideProps(overrides, "SubmitButton")}
           ></Button>
         </Flex>

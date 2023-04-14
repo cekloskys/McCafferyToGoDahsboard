@@ -5,9 +5,9 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
-import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { Restaurant } from "../models";
+import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
+import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -31,16 +31,16 @@ export declare type RestaurantUpdateFormValidationValues = {
     adminSub?: ValidationFunction<string>;
     serviceFee?: ValidationFunction<number>;
 };
-export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type RestaurantUpdateFormOverridesProps = {
-    RestaurantUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    name?: PrimitiveOverrideProps<TextFieldProps>;
-    image?: PrimitiveOverrideProps<TextFieldProps>;
-    startHrs?: PrimitiveOverrideProps<TextFieldProps>;
-    endHrs?: PrimitiveOverrideProps<TextFieldProps>;
-    location?: PrimitiveOverrideProps<TextFieldProps>;
-    adminSub?: PrimitiveOverrideProps<TextFieldProps>;
-    serviceFee?: PrimitiveOverrideProps<TextFieldProps>;
+    RestaurantUpdateFormGrid?: FormProps<GridProps>;
+    name?: FormProps<TextFieldProps>;
+    image?: FormProps<TextFieldProps>;
+    startHrs?: FormProps<TextFieldProps>;
+    endHrs?: FormProps<TextFieldProps>;
+    location?: FormProps<TextFieldProps>;
+    adminSub?: FormProps<TextFieldProps>;
+    serviceFee?: FormProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type RestaurantUpdateFormProps = React.PropsWithChildren<{
     overrides?: RestaurantUpdateFormOverridesProps | undefined | null;
@@ -50,6 +50,7 @@ export declare type RestaurantUpdateFormProps = React.PropsWithChildren<{
     onSubmit?: (fields: RestaurantUpdateFormInputValues) => RestaurantUpdateFormInputValues;
     onSuccess?: (fields: RestaurantUpdateFormInputValues) => void;
     onError?: (fields: RestaurantUpdateFormInputValues, errorMessage: string) => void;
+    onCancel?: () => void;
     onChange?: (fields: RestaurantUpdateFormInputValues) => RestaurantUpdateFormInputValues;
     onValidate?: RestaurantUpdateFormValidationValues;
 } & React.CSSProperties>;

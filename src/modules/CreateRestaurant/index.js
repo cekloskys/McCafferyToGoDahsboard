@@ -39,14 +39,6 @@ const CreateRestaurant = () => {
     
 
     const onFinish = async () => {
-        if (!restaurant) {
-            await createNewRestuarant();
-        } else {
-            await updateRestuarant();
-        }
-    }
-
-    const createNewRestuarant = async () => {
         if (!name) {
             message.error('Name required!');
             return;
@@ -67,6 +59,15 @@ const CreateRestaurant = () => {
             message.error('End Hours required!');
             return;
         }
+        
+        if (!restaurant) {
+            await createNewRestuarant();
+        } else {
+            await updateRestuarant();
+        }
+    }
+
+    const createNewRestuarant = async () => {
 
         const newRestuarant = await DataStore.save(
             new Restaurant({

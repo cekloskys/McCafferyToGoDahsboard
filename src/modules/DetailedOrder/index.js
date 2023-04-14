@@ -116,7 +116,7 @@ const DetailedOrder = () => {
     };
 
     return (
-        <Card title={`Created On ${createdOn}`} style={{ margin: 20 }}>
+        <Card title={`Order Details`} style={{ margin: 20 }}>
             <div style={styles.buttonsContainer}>
                 <Button
                     block
@@ -139,6 +139,7 @@ const DetailedOrder = () => {
             </div>
             <Descriptions bordered column={{ lg: 1, md: 1, sm: 1 }}>
                 <Descriptions.Item label='Order Status'><Tag color={statusToColor[order?.status]}>{order?.status}</Tag></Descriptions.Item>
+                <Descriptions.Item label='Created On'>{createdOn}</Descriptions.Item>
                 <Descriptions.Item label='Pick Up Time'>{order?.pickUpTime}</Descriptions.Item>
                 <Descriptions.Item label='Customer'>{customer?.name}</Descriptions.Item>
             </Descriptions>
@@ -149,7 +150,7 @@ const DetailedOrder = () => {
                     <List.Item>
                         <div>
                             <div style={{ fontWeight: 'bold' }}>{dish?.Dish?.name} x{dish?.quantity}</div>
-                            <div style={{ fontStyle: 'italic'}}>{dish?.specialInstructions}</div>
+                            <div style={{ fontStyle: 'italic'}}>{dish?.specialInstructions && 'Special Instructions: '}{dish?.specialInstructions}</div>
                         </div>
                         <div>${dish?.Dish?.price.toFixed(2)}</div>
                     </List.Item>

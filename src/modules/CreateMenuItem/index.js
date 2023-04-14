@@ -37,7 +37,7 @@ const CreateMenuItem = () => {
             message.error('Price required!');
             return;
         }
-        if (!calories) {
+        if (calories < 0) {
             message.error('Calories required!');
             return;
         }

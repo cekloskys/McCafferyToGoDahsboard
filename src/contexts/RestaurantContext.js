@@ -10,7 +10,7 @@ const RestaurantContextProvider = ({ children }) => {
     const sub = user?.attributes?.sub;
 
     useEffect(() => {
-        Auth.currentAuthenticatedUser({bypassCache: true}).then(setUser);
+        Auth.currentAuthenticatedUser({ bypassCache: true }).then(setUser);
     }, []);
 
     useEffect(() => {
@@ -20,14 +20,13 @@ const RestaurantContextProvider = ({ children }) => {
         // fetch Restaurant and filter by adminSub
         DataStore.query(Restaurant, (r) => r.adminSub.eq(sub)).then(
             (restaurants) => setRestaurant(restaurants[0]));
-            
+
     }, [sub]);
 
-    
-return (
-<RestaurantContext.Provider value ={{ restaurant, sub, setRestaurant }}>
-    {children}
-    </RestaurantContext.Provider>
+    return (
+        <RestaurantContext.Provider value={{ restaurant, sub, setRestaurant }}>
+            {children}
+        </RestaurantContext.Provider>
     );
 };
 

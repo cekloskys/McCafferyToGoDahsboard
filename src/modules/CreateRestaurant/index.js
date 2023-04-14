@@ -4,6 +4,9 @@ import dayjs from 'dayjs';
 import { DataStore } from 'aws-amplify';
 import { Restaurant } from '../../models';
 import { useRestaurantContext } from "../../contexts/RestaurantContext";
+import { Spinner } from "react-activity";
+import "react-activity/dist/library.css";
+
 const format = 'hh:mm A';
 
 const CreateRestaurant = () => {
@@ -16,7 +19,7 @@ const CreateRestaurant = () => {
     const [serviceFee, setServiceFee] = useState(0);
 
     const { sub, setRestaurant, restaurant } = useRestaurantContext();
-    // console.log(restaurant);
+
     useEffect(() => {
         if (!restaurant) {
             return;
@@ -29,14 +32,12 @@ const CreateRestaurant = () => {
         setServiceFee(restaurant.serviceFee);
     }, [restaurant])
 
-
     const onStartChange = (time, timeString) => {
         setStartHours(timeString.toString());
     }
     const onEndChange = (time, timeString) => {
         setEndHours(timeString.toString());
     }
-    
 
     const onFinish = async () => {
         if (!name) {
@@ -59,7 +60,7 @@ const CreateRestaurant = () => {
             message.error('End Hours required!');
             return;
         }
-        
+
         if (!restaurant) {
             await createNewRestuarant();
         } else {
@@ -74,8 +75,8 @@ const CreateRestaurant = () => {
                 name,
                 location,
                 image,
-                startHrs: (starthours.substring(0,1) === '0' ? starthours.substring(1) : starthours),
-                endHrs: (endhours.substring(0,1) === '0' ? endhours.substring(1) : endhours),
+                startHrs: (starthours.substring(0, 1) === '0' ? starthours.substring(1) : starthours),
+                endHrs: (endhours.substring(0, 1) === '0' ? endhours.substring(1) : endhours),
                 adminSub: sub,
                 serviceFee,
             }));
@@ -85,7 +86,6 @@ const CreateRestaurant = () => {
 
     };
 
-
     const updateRestuarant = async () => {
         const updatedRestuarant = await DataStore.save(
             Restaurant.copyOf(restaurant, (updated) => {
@@ -93,14 +93,25 @@ const CreateRestaurant = () => {
                 updated.location = location;
                 updated.image = image;
                 updated.serviceFee = serviceFee;
-                updated.startHrs = (starthours.substring(0,1) === '0' ? starthours.substring(1) : starthours);
-                updated.endHrs = (endhours.substring(0,1) === '0' ? endhours.substring(1) : endhours);
+                updated.startHrs = (starthours.substring(0, 1) === '0' ? starthours.substring(1) : starthours);
+                updated.endHrs = (endhours.substring(0, 1) === '0' ? endhours.substring(1) : endhours);
 
             })
         )
         setRestaurant(updatedRestuarant);
         message.success("Restaurant updated!");
     };
+
+    /* if (!restaurant) {
+        return (
+            <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>
+                <Spinner
+                    size="large"
+                    color="#8B0000"
+                />
+            </div>
+        )
+    } */
 
     return (
         <Card title={'Restaurant Details'} style={{ margin: 20 }}>

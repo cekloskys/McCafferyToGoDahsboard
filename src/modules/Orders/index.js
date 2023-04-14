@@ -21,11 +21,11 @@ const Orders = () => {
         if (!restaurant) {
             return;
         }
-        DataStore.query(Order, Predicates.ALL, {
-            sort: (d) => d.createdAt(SortDirection.DESCENDING)
-        },
-            (order) =>
-            order.orderRestaurantId.eq(restaurant.id)).then(setOrders);
+        DataStore.query(Order, 
+            (order) => order.orderRestaurantId.eq(restaurant.id),
+            Predicates.ALL, {
+                sort: (d) => d.createdAt(SortDirection.DESCENDING)
+            }).then(setOrders);
     }, [restaurant]);
 
     const renderOrderStatus = (orderStatus) => {
@@ -44,7 +44,7 @@ const Orders = () => {
             dataIndex: 'createdAt',
             key: 'createdAt',
             render: ((date) => getFullDate(date)),
-            
+
         },
 
         {
@@ -68,14 +68,17 @@ const Orders = () => {
     ];
 
     const getorders = () => {
-        DataStore.query(Order, (order) =>
-        order.orderRestaurantId.eq(restaurant.id)).then(setOrders);
+        DataStore.query(Order, 
+            (order) => order.orderRestaurantId.eq(restaurant.id),
+            Predicates.ALL, {
+                sort: (d) => d.createdAt(SortDirection.DESCENDING)
+            }).then(setOrders);
     };
 
     const renderGetOrderButton = () => {
         return (
 
-                <Button type='primary' onClick={getorders}>Get Orders</Button>
+            <Button type='primary' onClick={getorders}>Get Orders</Button>
 
         );
     };

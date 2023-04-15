@@ -4,7 +4,6 @@ import dayjs from 'dayjs';
 import { DataStore } from 'aws-amplify';
 import { Restaurant } from '../../models';
 import { useRestaurantContext } from "../../contexts/RestaurantContext";
-import { Spinner } from "react-activity";
 import "react-activity/dist/library.css";
 
 const format = 'hh:mm A';

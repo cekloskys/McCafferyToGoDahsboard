@@ -55,7 +55,6 @@ const DetailedOrder = () => {
         setCreatedOn(result);
     }, [order.createdAt]);
     
-
     useEffect(() => {
         if (!order.userID) {
             return;
@@ -87,15 +86,6 @@ const DetailedOrder = () => {
         };
         fetchDishes();
     }, [orderdish]);
-
-    /* const onDecline = async () => {
-        const updatedOrder = await DataStore.save(
-            Order.copyOf(order, (updated) => {
-                updated.status = OrderStatus.DECLINED;
-            })
-        )
-        setOrder(updatedOrder);
-    }; */
 
     const onAcceptOrder = async () => {
         const updatedOrder = await DataStore.save(

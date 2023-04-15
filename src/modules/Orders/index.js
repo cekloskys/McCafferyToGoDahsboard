@@ -8,6 +8,7 @@ import { useRestaurantContext } from '../../contexts/RestaurantContext';
 
 const Orders = () => {
     const [orders, setOrders] = useState([]);
+    const [sortedOrders, setSortedOrders] = useState([]);
     const { restaurant } = useRestaurantContext();
 
     const navigate = useNavigate();
@@ -30,7 +31,7 @@ const Orders = () => {
             return;
         }
         const sorted = orders.sort((d1, d2) => new Date(d2.createdAt).getTime() - new Date(d1.createdAt).getTime());
-        setOrders(sorted);
+        setSortedOrders(sorted);
     }, [orders]);
 
     const renderOrderStatus = (orderStatus) => {
@@ -76,7 +77,8 @@ const Orders = () => {
         DataStore.query(Order,
             (order) => order.orderRestaurantId.eq(restaurant.id)).then(setOrders);
         const sorted = orders.sort((d1, d2) => new Date(d2.createdAt).getTime() - new Date(d1.createdAt).getTime());
-        setOrders(sorted);
+        setSortedOrders(sorted);
+        //console.log(sorted);
     };
 
     const renderGetOrderButton = () => {
@@ -90,7 +92,7 @@ const Orders = () => {
     return (
         <Card title='Orders' style={{ margin: 20 }} extra={renderGetOrderButton()}>
             <Table
-                dataSource={orders}
+                dataSource={sortedOrders}
                 columns={tableColumns}
                 rowKey='id'
                 onRow={(order) => ({

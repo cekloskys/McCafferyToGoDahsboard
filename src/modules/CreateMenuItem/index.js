@@ -15,7 +15,6 @@ const CreateMenuItem = () => {
 
     const [gluten, setGluten] = useState(false);
     
-
     const handleChange = (value) => {
         console.log(`${value}`);
     };
@@ -37,9 +36,10 @@ const CreateMenuItem = () => {
             message.error('Price required!');
             return;
         }
-        if (calories < 0) {
-            message.error('Calories required!');
-            return;
+        if (!calories) {
+            calories = 0;
+            /* message.error('Calories required!');
+            return; */
         }
         if (!category) {
             message.error('Category required!');

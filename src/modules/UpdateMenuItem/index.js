@@ -61,8 +61,9 @@ const UpdateMenuItem = () => {
             return;
         }
         if (!calories) {
-            message.error('Calories required!');
-            return;
+            setCalories(0);
+            /* message.error('Calories required!');
+            return; */
         }
         if (!category) {
             message.error('Category required!');

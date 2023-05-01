@@ -38,14 +38,12 @@ const CreateMenuItem = () => {
         }
         if (!calories) {
             calories = 0;
-            /* message.error('Calories required!');
-            return; */
         }
         if (!category) {
             message.error('Category required!');
             return;
         }
-        const newMenuItem = await DataStore.save(
+        await DataStore.save(
             new Dish({
                 name,
                 description,
@@ -57,7 +55,6 @@ const CreateMenuItem = () => {
                 restaurantID: restaurant.id,
                 specialInstructions,
             }));
-            console.log(newMenuItem);
         message.success('Dish has been created!');
         navigate('/menu');
     };

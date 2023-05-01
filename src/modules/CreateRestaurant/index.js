@@ -101,17 +101,6 @@ const CreateRestaurant = () => {
         message.success("Restaurant updated!");
     };
 
-    /* if (!restaurant) {
-        return (
-            <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '100vh'}}>
-                <Spinner
-                    size="large"
-                    color="#8B0000"
-                />
-            </div>
-        )
-    } */
-
     return (
         <Card title={'Restaurant Details'} style={{ margin: 20 }}>
             <Form layout='vertical'>

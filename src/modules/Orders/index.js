@@ -78,7 +78,7 @@ const Orders = () => {
             (order) => order.orderRestaurantId.eq(restaurant.id)).then(setOrders);
         const sorted = orders.sort((d1, d2) => new Date(d2.createdAt).getTime() - new Date(d1.createdAt).getTime());
         setSortedOrders(sorted);
-        //console.log(sorted);
+        
     };
 
     const renderGetOrderButton = () => {

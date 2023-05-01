@@ -75,7 +75,7 @@ const DetailedOrder = () => {
         }
         const fetchDishes = async () => {
             const dishes = await DataStore.query(Dish);
-            console.log(dishes)
+            
 
             setFinalOrderDishes(
                 orderdish.map(orderdish => ({
